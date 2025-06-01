@@ -6,6 +6,7 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import view.Moldura;
 /**
  *
  * @author JoãoFontes
@@ -14,6 +15,13 @@ public class Mosaic {
 
     public static void main(String[] args) {
        
+        
+          /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> {
+            new Moldura().setVisible(true);
+        });
+        
+        
         
         try {
             Connection con;
