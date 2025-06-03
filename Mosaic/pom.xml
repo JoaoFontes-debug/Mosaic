@@ -36,6 +36,13 @@
             <artifactId>hibernate-core</artifactId>
             <version>6.4.4.Final</version>
         </dependency>
+        
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.32.0</version> <!-- Verifique a versão mais recente no Maven Central -->
+        </dependency>
+
     </dependencies>
 
 </project>
