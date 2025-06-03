@@ -1,16 +1,18 @@
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\controller\ControladorPrincipal.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\controller\EmpresaController.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\controller\ImagemController.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\CapituraDAO.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\DAOImpl\NewClass.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\EmpresaDAO.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\ImagemDAO.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\Captura.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\Empresa.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\Imagem.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\Mosaic.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\util\DialogoExibicaoAuto.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\util\ServicoCaptura.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\util\ServicoMesclagem.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\view\JanelaPrincipal.java
-C:\Users\JoãoFontes\Music\da deepseek\Mosaic\Mosaic\src\main\java\view\PainelCaptura.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\controller\ControladorPrincipal.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\SessaoDAO.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\ConfiguracaoCaptura.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\SessaoCaptura.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\Mosaic.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\CloudnaryConfig.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\DialogoExibicaoAuto.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\GerenciadorConexao.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\SeletorAreaCaptura.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\ServicoArmazenamentoNuvem.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\ServicoCaptura.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\ServicoMesclagem.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\DialogoExibicaoAuto.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\JanelaPrincipal.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelCaptura.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelConfiguracao.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelMetadados.java
+C:\Users\aluno.lauro\Music\TCC\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelSessao.java
