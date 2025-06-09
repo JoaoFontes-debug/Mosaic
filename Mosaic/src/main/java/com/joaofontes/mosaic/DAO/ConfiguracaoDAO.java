@@ -6,8 +6,8 @@ import java.sql.*;
 
 /**
  * DAO para a tabela configuracoes.
- * Assume que existe apenas um registro de configuração (id = 1),
- * ou que você trabalharia com um INSERT ... ON DUPLICATE KEY UPDATE.
+ * VERSÃO CORRIGIDA: Compatível com SQLite e MySQL.
+ * Assume que existe apenas um registo de configuração (id = 1).
  */
 public class ConfiguracaoDAO {
 
@@ -18,11 +18,32 @@ public class ConfiguracaoDAO {
     }
 
     /**
-     * Insere ou atualiza um registro de configuração.
-     * Aqui usamos INSERT ... ON DUPLICATE KEY UPDATE (MySQL).
+     * Insere ou atualiza um registo de configuração.
+     * Tenta usar a sintaxe 'INSERT ... ON CONFLICT' do SQLite.
+     * Se falhar, tenta usar a sintaxe 'INSERT ... ON DUPLICATE KEY UPDATE' do MySQL.
+     * Nota: O ControladorPrincipal atualmente salva as configurações num ficheiro .dat,
+     * e não chama este método. Para usar este DAO, o ControladorPrincipal precisa ser modificado.
      */
     public void salvarConfiguracao(ConfiguracaoCaptura config) throws SQLException {
-        String sql = "INSERT INTO configuracoes " +
+        // SQL para SQLite
+        String sqlSQLite = "INSERT INTO configuracoes " +
+            "(id, tempo_exibicao, exibicao_auto, num_imagens, direcao_mesclagem, transformacao_padrao, " +
+            " cloud_name, cloud_api_key, cloud_api_secret, salvar_local, salvar_nuvem) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+            "ON CONFLICT(id) DO UPDATE SET " +
+            "tempo_exibicao = excluded.tempo_exibicao, " +
+            "exibicao_auto = excluded.exibicao_auto, " +
+            "num_imagens = excluded.num_imagens, " +
+            "direcao_mesclagem = excluded.direcao_mesclagem, " +
+            "transformacao_padrao = excluded.transformacao_padrao, " +
+            "cloud_name = excluded.cloud_name, " +
+            "cloud_api_key = excluded.cloud_api_key, " +
+            "cloud_api_secret = excluded.cloud_api_secret, " +
+            "salvar_local = excluded.salvar_local, " +
+            "salvar_nuvem = excluded.salvar_nuvem";
+        
+        // SQL para MySQL
+        String sqlMySQL = "INSERT INTO configuracoes " +
             "(id, tempo_exibicao, exibicao_auto, num_imagens, direcao_mesclagem, transformacao_padrao, " +
             " cloud_name, cloud_api_key, cloud_api_secret, salvar_local, salvar_nuvem) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
@@ -38,17 +59,31 @@ public class ConfiguracaoDAO {
             "salvar_local = VALUES(salvar_local), " +
             "salvar_nuvem = VALUES(salvar_nuvem)";
 
-        try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            // Se você adotou somente um registro (id fixo = 1),
-            // então config.getId() = 1. Ou use config.getId() normalmente.
-            stmt.setInt(1, config.getId() == 0 ? 1 : config.getId());
+        String sqlToUse;
+        try {
+            // Verifica o nome do driver para decidir qual SQL usar
+            if (conexao.getMetaData().getDriverName().toLowerCase().contains("sqlite")) {
+                sqlToUse = sqlSQLite;
+                System.out.println("Usando sintaxe SQL para SQLite em ConfiguracaoDAO.");
+            } else {
+                sqlToUse = sqlMySQL;
+                System.out.println("Usando sintaxe SQL para MySQL em ConfiguracaoDAO.");
+            }
+        } catch (SQLException e) {
+            // Fallback para MySQL em caso de erro ao obter metadados
+            sqlToUse = sqlMySQL;
+        }
+
+        try (PreparedStatement stmt = conexao.prepareStatement(sqlToUse)) {
+            // Usa id fixo = 1 para a linha de configuração global.
+            stmt.setInt(1, 1);
             stmt.setInt(2, config.getTempoFechamentoAuto());
             stmt.setBoolean(3, config.isExibicaoAutoHabilitada());
-            stmt.setInt(4, config.getNumeroImagensMesclagem());
+            // CORREÇÃO: Chama o método getNumeroImagensParaMesclar()
+            stmt.setInt(4, config.getNumeroImagensParaMesclar());
+            // CORREÇÃO: Chama os métodos get...() que retornam String
             stmt.setString(5, config.getDirecaoMesclagem());
             stmt.setString(6, config.getTransformacaoPadrao());
-
-            // Novos campos:
             stmt.setString(7, config.getCloudName());
             stmt.setString(8, config.getCloudApiKey());
             stmt.setString(9, config.getCloudApiSecret());
@@ -60,30 +95,29 @@ public class ConfiguracaoDAO {
     }
 
     /**
-     * Carrega a configuração (apenas o primeiro registro ou id = 1).
+     * Carrega a configuração (apenas o registo com id = 1).
      * Retorna um objeto ConfiguracaoCaptura ou null se não existir.
      */
     public ConfiguracaoCaptura carregarConfiguracao() throws SQLException {
         String sql = "SELECT * FROM configuracoes WHERE id = ?";
         try (PreparedStatement stmt = conexao.prepareStatement(sql)) {
-            stmt.setInt(1, 1);  // supondo id fixo = 1
+            stmt.setInt(1, 1);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     ConfiguracaoCaptura config = new ConfiguracaoCaptura();
                     config.setId(rs.getInt("id"));
                     config.setTempoFechamentoAuto(rs.getInt("tempo_exibicao"));
                     config.setExibicaoAutoHabilitada(rs.getBoolean("exibicao_auto"));
-                    config.setNumeroImagensMesclagem(rs.getInt("num_imagens"));
+                    // CORREÇÃO: Chama o método setNumeroImagensParaMesclar()
+                    config.setNumeroImagensParaMesclar(rs.getInt("num_imagens"));
+                    // CORREÇÃO: Chama os métodos set...(String)
                     config.setDirecaoMesclagem(rs.getString("direcao_mesclagem"));
                     config.setTransformacaoPadrao(rs.getString("transformacao_padrao"));
-
-                    // Preenche os novos campos:
                     config.setCloudName(rs.getString("cloud_name"));
                     config.setCloudApiKey(rs.getString("cloud_api_key"));
                     config.setCloudApiSecret(rs.getString("cloud_api_secret"));
                     config.setSalvarLocal(rs.getBoolean("salvar_local"));
                     config.setSalvarNuvem(rs.getBoolean("salvar_nuvem"));
-
                     return config;
                 } else {
                     return null;

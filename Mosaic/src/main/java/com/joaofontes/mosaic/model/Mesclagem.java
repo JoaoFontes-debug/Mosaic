@@ -1,20 +1,27 @@
+
 package com.joaofontes.mosaic.model;
+
+/**
+ *
+ * @author JoãoFontes
+ */
 
 import java.util.Date;
 
-public class SessaoCaptura {
-
+/**
+ * Represents a single merged image. This was formerly SessaoCaptura.
+ * It is now linked to a parent Inspecao via idInspecao.
+ */
+public class Mesclagem {
     private int id;
-    private String nomePeca;
-    private String descricao;
+    private int idInspecao; // Foreign key to Inspecao
     private Date dataCaptura;
-    private String caminhoImagem;
-    private String caminhoLocal;
+    private String caminhoImagem; // Cloud URL
+    private String caminhoLocal;  // Local file path
 
-    public SessaoCaptura() {
-    }
+    public Mesclagem() {}
 
-    // Getters e Setters
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -23,20 +30,12 @@ public class SessaoCaptura {
         this.id = id;
     }
 
-    public String getNomePeca() {
-        return nomePeca;
+    public int getIdInspecao() {
+        return idInspecao;
     }
 
-    public void setNomePeca(String nomePeca) {
-        this.nomePeca = nomePeca;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setIdInspecao(int idInspecao) {
+        this.idInspecao = idInspecao;
     }
 
     public Date getDataCaptura() {

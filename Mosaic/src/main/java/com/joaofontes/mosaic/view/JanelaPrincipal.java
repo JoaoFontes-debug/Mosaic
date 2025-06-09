@@ -1,27 +1,23 @@
 package com.joaofontes.mosaic.view;
 
 import com.joaofontes.mosaic.controller.ControladorPrincipal;
-import com.joaofontes.mosaic.model.ConfiguracaoCaptura; 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-// import javax.swing.SwingUtilities; // Já importado em Mosaic.java
 import java.net.URL;
 
 public class JanelaPrincipal extends JFrame {
     private static JanelaPrincipal instancia;
-    private ControladorPrincipal controlador;
+    private final ControladorPrincipal controlador;
     private PainelCaptura painelCaptura;
     private PainelMetadados painelMetadados;
     private PainelConfiguracao painelConfiguracao;
-    private PainelSessao painelSessao;
-    private JTabbedPane abas;
+    private PainelInspecoes painelInspecoes;
 
     private JanelaPrincipal() {
-        // Inicializa o controlador
-        // A configuração é carregada de um arquivo ou padrão dentro do ControladorPrincipal
         this.controlador = new ControladorPrincipal(); 
         initUI();
     }
@@ -35,34 +31,36 @@ public class JanelaPrincipal extends JFrame {
 
     private void initUI() {
         configurarJanela();
-
-        abas = new JTabbedPane();
-        // Passa a instância do controlador para os painéis
+        JTabbedPane abas = new JTabbedPane();
         painelCaptura = new PainelCaptura(controlador);
         painelMetadados = new PainelMetadados(controlador);
         painelConfiguracao = new PainelConfiguracao(controlador);
-        painelSessao = new PainelSessao(controlador);
+        painelInspecoes = new PainelInspecoes(controlador);
 
         abas.addTab("Captura", painelCaptura);
-        abas.addTab("Metadados", painelMetadados);
+        abas.addTab("Metadados da Inspeção", painelMetadados);
         abas.addTab("Configurações", painelConfiguracao);
-        abas.addTab("Sessões Salvas", painelSessao);
+        abas.addTab("Inspeções Salvas", painelInspecoes);
 
         add(abas, BorderLayout.CENTER);
     }
 
     private void configurarJanela() {
         setTitle("Sistema MOSAIC");
-        setSize(756, 567); // Tamanho fixo (20cm x 15cm @ 96 DPI)
-        setResizable(false); // Desabilitar redimensionamento
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centralizar na tela
+        
+        // ALTERAÇÃO: Aumentei o tamanho da janela para melhor acomodar os componentes.
+        setSize(950, 700);
+        setMinimumSize(new Dimension(950, 700)); // Impede que a janela seja redimensionada para um tamanho menor
 
-        URL iconURL = getClass().getResource("/icons/mosaic_icon.png"); 
+        setResizable(true); // Permitir redimensionamento pode ser útil, mas mantendo um mínimo.
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Centraliza na tela
+        
+        URL iconURL = getClass().getResource("com/joaofontes/mosaic/icons/logoMosaic.png");
         if (iconURL != null) {
             setIconImage(new ImageIcon(iconURL).getImage());
         } else {
-            System.err.println("Ícone da aplicação não encontrado: /icons/mosaic_icon.png");
+            System.err.println("Ícone da aplicação não encontrado em /com/joaofontes/mosaic/icons/Logo_Mosaic.png");
         }
     }
 
@@ -70,25 +68,9 @@ public class JanelaPrincipal extends JFrame {
         Runnable resumeCaptureAction = () -> {
             if (controlador.getConfiguracao().getAreaCaptura() != null) {
                  controlador.reiniciarCapturaPosExibicao();
-            } else {
-                System.out.println("Nenhuma área de captura definida. Captura não será reiniciada.");
             }
         };
-
-        DialogoExibicaoAuto dialogo = new DialogoExibicaoAuto(
-            this,
-            imagem,
-            controlador.getConfiguracao().getTempoFechamentoAuto(), 
-            resumeCaptureAction
-        );
+        DialogoExibicaoAuto dialogo = new DialogoExibicaoAuto(this, imagem, controlador.getConfiguracao().getTempoFechamentoAuto(), resumeCaptureAction);
         dialogo.exibir(); 
-    }
-    
-    public ControladorPrincipal getControlador() {
-        return controlador;
-    }
-
-    public PainelMetadados getPainelMetadados() {
-        return painelMetadados;
     }
 }

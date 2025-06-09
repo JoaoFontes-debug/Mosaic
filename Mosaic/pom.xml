@@ -18,11 +18,27 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.seuprojeto.Main</mainClass>
+                            <mainClass>com.joaofontes.mosaic.Mosaic</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
             </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            
         </plugins>
     </build>
 
@@ -39,19 +55,19 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>9.3.0</version>
         </dependency>
-        
+              
         <!-- JPA API -->
         <dependency>
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.0</version>
         </dependency>
 
         <!-- Hibernate Core (implementação JPA) -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.4.4.Final</version>
+            <version>7.0.0.Final</version>
         </dependency>
         
         <dependency>
