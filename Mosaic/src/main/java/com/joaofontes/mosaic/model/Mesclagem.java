@@ -1,25 +1,25 @@
-
 package com.joaofontes.mosaic.model;
 
 /**
  *
  * @author JoãoFontes
  */
-
 import java.util.Date;
 
 /**
- * Represents a single merged image. This was formerly SessaoCaptura.
- * It is now linked to a parent Inspecao via idInspecao.
+ * Represents a single merged image. This was formerly SessaoCaptura. It is now
+ * linked to a parent Inspecao via idInspecao.
  */
 public class Mesclagem {
+
     private int id;
     private int idInspecao; // Foreign key to Inspecao
     private Date dataCaptura;
     private String caminhoImagem; // Cloud URL
     private String caminhoLocal;  // Local file path
 
-    public Mesclagem() {}
+    public Mesclagem() {
+    }
 
     // Getters and Setters
     public int getId() {

@@ -5,9 +5,8 @@ import com.joaofontes.mosaic.model.ConfiguracaoCaptura;
 import java.sql.*;
 
 /**
- * DAO para a tabela configuracoes.
- * VERSÃO CORRIGIDA: Compatível com SQLite e MySQL.
- * Assume que existe apenas um registo de configuração (id = 1).
+ * DAO para a tabela configuracoes. VERSÃO CORRIGIDA: Compatível com SQLite e
+ * MySQL. Assume que existe apenas um registo de configuração (id = 1).
  */
 public class ConfiguracaoDAO {
 
@@ -18,46 +17,47 @@ public class ConfiguracaoDAO {
     }
 
     /**
-     * Insere ou atualiza um registo de configuração.
-     * Tenta usar a sintaxe 'INSERT ... ON CONFLICT' do SQLite.
-     * Se falhar, tenta usar a sintaxe 'INSERT ... ON DUPLICATE KEY UPDATE' do MySQL.
-     * Nota: O ControladorPrincipal atualmente salva as configurações num ficheiro .dat,
-     * e não chama este método. Para usar este DAO, o ControladorPrincipal precisa ser modificado.
+     * Insere ou atualiza um registo de configuração. Tenta usar a sintaxe
+     * 'INSERT ... ON CONFLICT' do SQLite. Se falhar, tenta usar a sintaxe
+     * 'INSERT ... ON DUPLICATE KEY UPDATE' do MySQL. Nota: O
+     * ControladorPrincipal atualmente salva as configurações num ficheiro .dat,
+     * e não chama este método. Para usar este DAO, o ControladorPrincipal
+     * precisa ser modificado.
      */
     public void salvarConfiguracao(ConfiguracaoCaptura config) throws SQLException {
         // SQL para SQLite
-        String sqlSQLite = "INSERT INTO configuracoes " +
-            "(id, tempo_exibicao, exibicao_auto, num_imagens, direcao_mesclagem, transformacao_padrao, " +
-            " cloud_name, cloud_api_key, cloud_api_secret, salvar_local, salvar_nuvem) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-            "ON CONFLICT(id) DO UPDATE SET " +
-            "tempo_exibicao = excluded.tempo_exibicao, " +
-            "exibicao_auto = excluded.exibicao_auto, " +
-            "num_imagens = excluded.num_imagens, " +
-            "direcao_mesclagem = excluded.direcao_mesclagem, " +
-            "transformacao_padrao = excluded.transformacao_padrao, " +
-            "cloud_name = excluded.cloud_name, " +
-            "cloud_api_key = excluded.cloud_api_key, " +
-            "cloud_api_secret = excluded.cloud_api_secret, " +
-            "salvar_local = excluded.salvar_local, " +
-            "salvar_nuvem = excluded.salvar_nuvem";
-        
+        String sqlSQLite = "INSERT INTO configuracoes "
+                + "(id, tempo_exibicao, exibicao_auto, num_imagens, direcao_mesclagem, transformacao_padrao, "
+                + " cloud_name, cloud_api_key, cloud_api_secret, salvar_local, salvar_nuvem) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+                + "ON CONFLICT(id) DO UPDATE SET "
+                + "tempo_exibicao = excluded.tempo_exibicao, "
+                + "exibicao_auto = excluded.exibicao_auto, "
+                + "num_imagens = excluded.num_imagens, "
+                + "direcao_mesclagem = excluded.direcao_mesclagem, "
+                + "transformacao_padrao = excluded.transformacao_padrao, "
+                + "cloud_name = excluded.cloud_name, "
+                + "cloud_api_key = excluded.cloud_api_key, "
+                + "cloud_api_secret = excluded.cloud_api_secret, "
+                + "salvar_local = excluded.salvar_local, "
+                + "salvar_nuvem = excluded.salvar_nuvem";
+
         // SQL para MySQL
-        String sqlMySQL = "INSERT INTO configuracoes " +
-            "(id, tempo_exibicao, exibicao_auto, num_imagens, direcao_mesclagem, transformacao_padrao, " +
-            " cloud_name, cloud_api_key, cloud_api_secret, salvar_local, salvar_nuvem) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-            "ON DUPLICATE KEY UPDATE " +
-            "tempo_exibicao = VALUES(tempo_exibicao), " +
-            "exibicao_auto = VALUES(exibicao_auto), " +
-            "num_imagens = VALUES(num_imagens), " +
-            "direcao_mesclagem = VALUES(direcao_mesclagem), " +
-            "transformacao_padrao = VALUES(transformacao_padrao), " +
-            "cloud_name = VALUES(cloud_name), " +
-            "cloud_api_key = VALUES(cloud_api_key), " +
-            "cloud_api_secret = VALUES(cloud_api_secret), " +
-            "salvar_local = VALUES(salvar_local), " +
-            "salvar_nuvem = VALUES(salvar_nuvem)";
+        String sqlMySQL = "INSERT INTO configuracoes "
+                + "(id, tempo_exibicao, exibicao_auto, num_imagens, direcao_mesclagem, transformacao_padrao, "
+                + " cloud_name, cloud_api_key, cloud_api_secret, salvar_local, salvar_nuvem) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+                + "ON DUPLICATE KEY UPDATE "
+                + "tempo_exibicao = VALUES(tempo_exibicao), "
+                + "exibicao_auto = VALUES(exibicao_auto), "
+                + "num_imagens = VALUES(num_imagens), "
+                + "direcao_mesclagem = VALUES(direcao_mesclagem), "
+                + "transformacao_padrao = VALUES(transformacao_padrao), "
+                + "cloud_name = VALUES(cloud_name), "
+                + "cloud_api_key = VALUES(cloud_api_key), "
+                + "cloud_api_secret = VALUES(cloud_api_secret), "
+                + "salvar_local = VALUES(salvar_local), "
+                + "salvar_nuvem = VALUES(salvar_nuvem)";
 
         String sqlToUse;
         try {
@@ -95,8 +95,8 @@ public class ConfiguracaoDAO {
     }
 
     /**
-     * Carrega a configuração (apenas o registo com id = 1).
-     * Retorna um objeto ConfiguracaoCaptura ou null se não existir.
+     * Carrega a configuração (apenas o registo com id = 1). Retorna um objeto
+     * ConfiguracaoCaptura ou null se não existir.
      */
     public ConfiguracaoCaptura carregarConfiguracao() throws SQLException {
         String sql = "SELECT * FROM configuracoes WHERE id = ?";

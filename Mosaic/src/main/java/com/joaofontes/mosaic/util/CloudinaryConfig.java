@@ -1,9 +1,10 @@
 package com.joaofontes.mosaic.util;
 
 import com.cloudinary.Cloudinary;
-import io.github.cdimascio.dotenv.Dotenv; 
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class CloudinaryConfig {
+
     private static Cloudinary cloudinaryInstance;
 
     static {
@@ -29,7 +30,7 @@ public class CloudinaryConfig {
 
     public static Cloudinary getCloudinaryInstance() {
         if (cloudinaryInstance == null) {
-             System.out.println("CloudinaryConfig: Tentando obter instância, mas é nula. Isso é esperado se CLOUDINARY_URL não foi definida no ambiente/dotenv.");
+            System.out.println("CloudinaryConfig: Tentando obter instância, mas é nula. Isso é esperado se CLOUDINARY_URL não foi definida no ambiente/dotenv.");
         }
         return cloudinaryInstance;
     }

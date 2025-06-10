@@ -38,7 +38,7 @@ public class JanelaPrincipal extends JFrame {
         painelInspecoes = new PainelInspecoes(controlador);
 
         abas.addTab("Captura", painelCaptura);
-        abas.addTab("Metadados da Inspeção", painelMetadados);
+        abas.addTab("Detalhes da Inspeção", painelMetadados);
         abas.addTab("Configurações", painelConfiguracao);
         abas.addTab("Inspeções Salvas", painelInspecoes);
 
@@ -56,7 +56,7 @@ public class JanelaPrincipal extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Centraliza na tela
         
-        URL iconURL = getClass().getResource("com/joaofontes/mosaic/icons/logoMosaic.png");
+        URL iconURL = getClass().getResource("/images/Logo_Mosaic.png");
         if (iconURL != null) {
             setIconImage(new ImageIcon(iconURL).getImage());
         } else {

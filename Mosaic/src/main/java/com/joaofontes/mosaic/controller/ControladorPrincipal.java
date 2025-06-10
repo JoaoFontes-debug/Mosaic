@@ -24,7 +24,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class ControladorPrincipal {
+public final class ControladorPrincipal {
+
     private ConfiguracaoCaptura configuracao;
     private ServicoCaptura servicoCaptura;
     private ServicoArmazenamentoNuvem servicoNuvem;
@@ -38,19 +39,19 @@ public class ControladorPrincipal {
     private List<BufferedImage> imagensAcumuladas = new ArrayList<>();
 
     public ControladorPrincipal() {
-        this.configuracao = new ConfiguracaoCaptura(); 
-        carregarConfiguracao(); 
-        this.servicoCaptura = new ServicoCaptura(this); 
+        this.configuracao = new ConfiguracaoCaptura();
+        carregarConfiguracao();
+        this.servicoCaptura = new ServicoCaptura(this);
         this.servicoNuvem = new ServicoArmazenamentoNuvem(this.configuracao.getCloudinaryUrl());
         this.servicoMesclagem = new ServicoMesclagem();
-        
+
         try {
             Connection conn = DatabaseManager.getConnection();
             if (conn != null) {
                 this.inspecaoDAO = new InspecaoDAO(conn);
                 this.mesclagemDAO = new MesclagemDAO(conn);
             } else {
-                 JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Não foi possível conectar ao banco de dados.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,11 +83,13 @@ public class ControladorPrincipal {
         }
         imagensAcumuladas.clear();
         servicoCaptura.iniciarCaptura(configuracao, configuracao.getAreaCaptura());
-        estavaCapturandoAntesDeExibir = true; 
+        estavaCapturandoAntesDeExibir = true;
     }
 
     public void onNovaImagemDetectada(BufferedImage novaImagem) {
-        if (inspecaoAtiva == null || !servicoCaptura.isCapturando()) return;
+        if (inspecaoAtiva == null || !servicoCaptura.isCapturando()) {
+            return;
+        }
 
         imagensAcumuladas.add(novaImagem);
         System.out.println("Imagem " + imagensAcumuladas.size() + "/" + configuracao.getNumeroImagensParaMesclar() + " capturada para a inspeção '" + inspecaoAtiva.getNomePeca() + "'.");
@@ -97,10 +100,12 @@ public class ControladorPrincipal {
             SwingUtilities.invokeLater(() -> processarEsalvarLoteDeImagens(imagensParaMesclar));
         }
     }
-    
+
     private void processarEsalvarLoteDeImagens(List<BufferedImage> loteDeImagens) {
-        if (inspecaoAtiva == null) return;
-        
+        if (inspecaoAtiva == null) {
+            return;
+        }
+
         BufferedImage imagemMesclada = servicoMesclagem.mesclarImagens(loteDeImagens, configuracao);
 
         String nomeBaseArquivo = "merge_" + inspecaoAtiva.getId() + "_" + UUID.randomUUID().toString();
@@ -115,7 +120,7 @@ public class ControladorPrincipal {
             exibirImagem(imagemMesclada);
         }
     }
-    
+
     private void salvarDadosDaMesclagem(String caminhoLocal, String urlNuvem) {
         try {
             if (inspecaoAtiva.getId() == 0) {
@@ -133,12 +138,16 @@ public class ControladorPrincipal {
             JOptionPane.showMessageDialog(JanelaPrincipal.getInstance(), "Erro ao salvar dados no banco: " + e.getMessage(), "Erro de Banco de Dados", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     private String salvarImagemLocalmente(BufferedImage imagem, String nomeArquivo) {
-        if (configuracao.getDiretorioCaptura() == null || configuracao.getDiretorioCaptura().isEmpty()) return null;
+        if (configuracao.getDiretorioCaptura() == null || configuracao.getDiretorioCaptura().isEmpty()) {
+            return null;
+        }
         try {
             File diretorio = new File(configuracao.getDiretorioCaptura());
-            if (!diretorio.exists()) diretorio.mkdirs();
+            if (!diretorio.exists()) {
+                diretorio.mkdirs();
+            }
             File arquivoImagem = new File(diretorio, nomeArquivo);
             ImageIO.write(imagem, "png", arquivoImagem);
             return arquivoImagem.getAbsolutePath();
@@ -149,7 +158,9 @@ public class ControladorPrincipal {
 
     private String salvarImagemNuvem(BufferedImage imagem, String nomeArquivoPublico) {
         String url = configuracao.getCloudinaryUrl();
-        if (url == null || url.isEmpty()) return null;
+        if (url == null || url.isEmpty()) {
+            return null;
+        }
         if (servicoNuvem == null || !url.equals(servicoNuvem.getActiveCloudinaryUrl())) {
             servicoNuvem.reinitialize(url);
         }
@@ -163,7 +174,7 @@ public class ControladorPrincipal {
 
     private void exibirImagem(BufferedImage imagem) {
         if (servicoCaptura.isCapturando()) {
-            servicoCaptura.pararCaptura(); 
+            servicoCaptura.pararCaptura();
             estavaCapturandoAntesDeExibir = true;
         } else {
             estavaCapturandoAntesDeExibir = false;
@@ -172,47 +183,57 @@ public class ControladorPrincipal {
     }
 
     public List<Inspecao> carregarInspecoes(String nomePeca, Date dataInicio, Date dataFim) throws SQLException {
-        if (inspecaoDAO == null) throw new SQLException("DAO de Inspeção não inicializado.");
+        if (inspecaoDAO == null) {
+            throw new SQLException("DAO de Inspeção não inicializado.");
+        }
         return inspecaoDAO.buscarInspecoes(nomePeca, dataInicio, dataFim);
     }
 
     public List<Mesclagem> carregarMesclagensPorInspecao(int idInspecao) throws SQLException {
-        if (mesclagemDAO == null) throw new SQLException("DAO de Mesclagem não inicializado.");
+        if (mesclagemDAO == null) {
+            throw new SQLException("DAO de Mesclagem não inicializado.");
+        }
         return mesclagemDAO.buscarMesclagensPorInspecaoId(idInspecao);
     }
-    
+
     public void pararCaptura() {
         servicoCaptura.pararCaptura();
         estavaCapturandoAntesDeExibir = false;
     }
-    
+
     public void reiniciarCapturaPosExibicao() {
         if (estavaCapturandoAntesDeExibir && configuracao.getAreaCaptura() != null) {
             servicoCaptura.iniciarCaptura(configuracao, configuracao.getAreaCaptura());
         }
     }
-    
+
     public boolean selecionarAreaCaptura() {
         SeletorAreaCaptura seletor = new SeletorAreaCaptura(JanelaPrincipal.getInstance());
-        Rectangle areaSelecionada = seletor.getAreaSelecionada(); 
+        Rectangle areaSelecionada = seletor.getAreaSelecionada();
         if (areaSelecionada != null && areaSelecionada.width > 0 && areaSelecionada.height > 0) {
-            configuracao.setAreaCaptura(areaSelecionada); return true;
+            configuracao.setAreaCaptura(areaSelecionada);
+            return true;
         }
-        configuracao.setAreaCaptura(null); return false;
+        configuracao.setAreaCaptura(null);
+        return false;
     }
-    
-    public ConfiguracaoCaptura getConfiguracao() { return configuracao; }
+
+    public ConfiguracaoCaptura getConfiguracao() {
+        return configuracao;
+    }
 
     public void salvarConfiguracao() {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO_CONFIG_LOCAL))) {
             oos.writeObject(configuracao);
-            if (servicoNuvem != null) servicoNuvem.reinitialize(configuracao.getCloudinaryUrl());
+            if (servicoNuvem != null) {
+                servicoNuvem.reinitialize(configuracao.getCloudinaryUrl());
+            }
             JOptionPane.showMessageDialog(JanelaPrincipal.getInstance(), "Configurações salvas!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException e) {
             JOptionPane.showMessageDialog(JanelaPrincipal.getInstance(), "Erro ao salvar configurações.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     public void carregarConfiguracao() {
         File configFile = new File(ARQUIVO_CONFIG_LOCAL);
         if (configFile.exists()) {

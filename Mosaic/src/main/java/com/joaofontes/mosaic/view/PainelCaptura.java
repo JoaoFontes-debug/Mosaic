@@ -21,7 +21,7 @@ public class PainelCaptura extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
 
         // ALTERAÇÃO: Adiciona o logo
-        URL logoUrl = getClass().getResource("/com/joaofontes/mosaic/icones/logoMosaic.png");
+        URL logoUrl = getClass().getResource("/images/Logo_Mosaic.png");
         if (logoUrl != null) {
             ImageIcon logoIcon = new ImageIcon(logoUrl);
             // Redimensiona o logo para um tamanho apropriado se necessário

@@ -26,6 +26,7 @@ com\joaofontes\mosaic\util\SeletorAreaCaptura$1.class
 com\joaofontes\mosaic\model\Inspecao.class
 com\joaofontes\mosaic\view\DialogoExibicaoAuto$1.class
 com\joaofontes\mosaic\util\SeletorAreaCaptura.class
+com\joaofontes\mosaic\view\PainelInspecoes$3.class
 com\joaofontes\mosaic\DAO\ConfiguracaoDAO.class
 com\joaofontes\mosaic\view\PainelMetadados.class
 com\joaofontes\mosaic\view\JanelaPrincipal.class

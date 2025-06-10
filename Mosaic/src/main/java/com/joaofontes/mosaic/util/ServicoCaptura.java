@@ -4,13 +4,14 @@ import com.joaofontes.mosaic.controller.ControladorPrincipal;
 import com.joaofontes.mosaic.model.ConfiguracaoCaptura;
 import java.awt.Rectangle;
 import java.awt.Robot;
-import javax.swing.Timer; 
+import javax.swing.Timer;
 import java.awt.AWTException;
 import java.awt.image.BufferedImage;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class ServicoCaptura {
+
     private ControladorPrincipal controlador;
     private Timer temporizador;
     private Robot robot;
@@ -56,7 +57,7 @@ public class ServicoCaptura {
         capturando = false;
         System.out.println("Serviço de captura parado.");
     }
-    
+
     public boolean isCapturando() {
         return capturando;
     }
@@ -78,22 +79,24 @@ public class ServicoCaptura {
         } catch (Exception e) {
             System.err.println("Erro durante a captura de tela: " + e.getMessage());
             pararCaptura();
-            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, 
-                "Ocorreu um erro durante a captura da tela.\nA captura foi interrompida.", 
-                "Erro de Captura", JOptionPane.ERROR_MESSAGE));
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null,
+                    "Ocorreu um erro durante a captura da tela.\nA captura foi interrompida.",
+                    "Erro de Captura", JOptionPane.ERROR_MESSAGE));
         }
     }
 
     private boolean imagemMudou(BufferedImage img1, BufferedImage img2) {
         if (img1.getWidth() != img2.getWidth() || img1.getHeight() != img2.getHeight()) {
             if (img1.getWidth() != larguraAnterior || img1.getHeight() != alturaAnterior) {
-                 return true;
+                return true;
             }
         }
         int step = Math.max(1, Math.min(img1.getWidth(), img1.getHeight()) / 20);
         for (int x = 0; x < img1.getWidth(); x += step) {
             for (int y = 0; y < img1.getHeight(); y += step) {
-                if (img1.getRGB(x, y) != img2.getRGB(x, y)) return true;
+                if (img1.getRGB(x, y) != img2.getRGB(x, y)) {
+                    return true;
+                }
             }
         }
         return false;

@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class PainelMetadados extends JPanel {
+
     private final ControladorPrincipal controlador;
     private JTextField campoNomePeca;
     private JTextArea areaDescricao;
@@ -23,13 +24,13 @@ public class PainelMetadados extends JPanel {
         gbc.anchor = GridBagConstraints.WEST;
 
         // Linha 1: Nome da Peça
-        gbc.gridx = 0; 
+        gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0; // O label não estica
         gbc.fill = GridBagConstraints.NONE;
         add(new JLabel("Nome da Peça/Inspeção:"), gbc);
 
-        gbc.gridx = 1; 
+        gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 1.0; // O campo de texto estica
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -37,14 +38,14 @@ public class PainelMetadados extends JPanel {
         add(campoNomePeca, gbc);
 
         // Linha 2: Descrição
-        gbc.gridx = 0; 
+        gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.NORTHWEST; // Alinha o label ao topo
         gbc.weightx = 0;
         gbc.fill = GridBagConstraints.NONE;
         add(new JLabel("Descrição/Observações:"), gbc);
 
-        gbc.gridx = 1; 
+        gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0; // Área de texto ocupa todo o espaço vertical disponível
@@ -55,7 +56,7 @@ public class PainelMetadados extends JPanel {
         add(new JScrollPane(areaDescricao), gbc);
 
         // Linha 3: Botão
-        gbc.gridx = 1; 
+        gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.weightx = 0; // Botão não estica
         gbc.weighty = 0;
@@ -69,8 +70,8 @@ public class PainelMetadados extends JPanel {
 
     private void iniciarNovaInspecao() {
         controlador.iniciarNovaInspecao(
-            campoNomePeca.getText(),
-            areaDescricao.getText()
+                campoNomePeca.getText(),
+                areaDescricao.getText()
         );
     }
 }

@@ -8,6 +8,10 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Clipboard;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,30 +42,81 @@ public class PainelInspecoes extends JPanel {
         splitPane.setBottomComponent(criarPainelTabelaMesclagens());
         splitPane.setResizeWeight(0.5);
         add(splitPane, BorderLayout.CENTER);
+
+        // ALTERAÇÃO: Cria e adiciona o menu de contexto para as tabelas
+        criarEMostrarMenuDeCopia();
+    }
+
+    /**
+     * NOVO MÉTODO: Cria um menu de popup para copiar o conteúdo de uma célula.
+     */
+    private void criarEMostrarMenuDeCopia() {
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem itemCopiar = new JMenuItem("Copiar");
+        popupMenu.add(itemCopiar);
+
+        // Ação que será executada quando o item "Copiar" for clicado
+        itemCopiar.addActionListener(ae -> {
+            // Descobre qual tabela foi clicada (a que invocou o popup)
+            JTable tabelaFonte = (JTable) popupMenu.getInvoker();
+            int linhaSelecionada = tabelaFonte.getSelectedRow();
+            int colunaSelecionada = tabelaFonte.getSelectedColumn();
+            
+            if (linhaSelecionada != -1 && colunaSelecionada != -1) {
+                // Obtém o valor da célula
+                Object valorCelula = tabelaFonte.getValueAt(linhaSelecionada, colunaSelecionada);
+                String textoParaCopiar = (valorCelula == null) ? "" : valorCelula.toString();
+
+                // Copia o texto para a área de transferência do sistema
+                StringSelection selecaoString = new StringSelection(textoParaCopiar);
+                Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                clipboard.setContents(selecaoString, null);
+            }
+        });
+
+        // Adaptador de rato para mostrar o popup menu com o clique direito
+        MouseAdapter adaptadorMouse = new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (e.isPopupTrigger()) { // Verifica se é um clique de popup (geralmente direito)
+                    JTable tabelaFonte = (JTable) e.getSource();
+                    int linha = tabelaFonte.rowAtPoint(e.getPoint());
+                    int coluna = tabelaFonte.columnAtPoint(e.getPoint());
+
+                    // Seleciona a célula sob o cursor antes de mostrar o menu
+                    if (linha >= 0 && coluna >= 0) {
+                        tabelaFonte.changeSelection(linha, coluna, false, false);
+                    }
+
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        };
+
+        // Adiciona o listener a ambas as tabelas
+        tabelaInspecoes.addMouseListener(adaptadorMouse);
+        tabelaMesclagens.addMouseListener(adaptadorMouse);
     }
 
     private JPanel criarPainelFiltros() {
         JPanel painel = new JPanel(new GridBagLayout());
         painel.setBorder(BorderFactory.createTitledBorder("Filtros de Busca de Inspeções"));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Aumenta o espaçamento
-        gbc.anchor = GridBagConstraints.EAST; // Alinha os labels à direita
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.EAST;
 
-        // Linha 0: Nome da Peça
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0; painel.add(new JLabel("Nome da Peça:"), gbc);
-        campoNomePecaFiltro = new JTextField(25); // Tamanho aumentado
+        campoNomePecaFiltro = new JTextField(25);
         gbc.gridx = 1; gbc.gridy = 0; gbc.gridwidth = 3; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0; painel.add(campoNomePecaFiltro, gbc);
 
-        // Linha 1: Datas
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 1; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0; painel.add(new JLabel("Data Início:"), gbc);
-        campoDataInicioFiltro = new JTextField(12); // Tamanho aumentado
+        campoDataInicioFiltro = new JTextField(12);
         gbc.gridx = 1; gbc.gridy = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 0.5; painel.add(campoDataInicioFiltro, gbc);
 
         gbc.gridx = 2; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0; painel.add(new JLabel("Data Fim:"), gbc);
-        campoDataFimFiltro = new JTextField(12); // Tamanho aumentado
+        campoDataFimFiltro = new JTextField(12);
         gbc.gridx = 3; gbc.gridy = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 0.5; painel.add(campoDataFimFiltro, gbc);
         
-        // Linha 2: Botões
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         JButton btnBuscar = new JButton("Buscar");
         btnBuscar.addActionListener(e -> buscarInspecoesComFiltro());
@@ -121,9 +176,11 @@ public class PainelInspecoes extends JPanel {
     private void buscarInspecoesComFiltro() {
         try {
             modeloMesclagens.setRowCount(0);
+            
             String nomePeca = campoNomePecaFiltro.getText().trim();
             Date dataInicio = parseDate(campoDataInicioFiltro.getText());
             Date dataFim = parseDate(campoDataFimFiltro.getText());
+
             List<Inspecao> inspecoes = controlador.carregarInspecoes(nomePeca.isEmpty() ? null : nomePeca, dataInicio, dataFim);
             atualizarTabelaInspecoes(inspecoes);
         } catch (ParseException e) {

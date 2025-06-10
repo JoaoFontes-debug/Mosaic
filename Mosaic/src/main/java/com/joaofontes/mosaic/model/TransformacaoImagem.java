@@ -7,7 +7,7 @@ public enum TransformacaoImagem {
     NENHUMA("Nenhuma"),
     ESPELHAR_HORIZONTAL("Espelhar Horizontalmente"),
     ESPELHAR_VERTICAL("Espelhar Verticalmente"),
-    ROTACIONAR_90("Rotacionar 90°"),    // Sentido horário
+    ROTACIONAR_90("Rotacionar 90°"), // Sentido horário
     ROTACIONAR_180("Rotacionar 180°"),
     ROTACIONAR_270("Rotacionar 270°");  // Sentido horário (equivalente a -90°)
 
@@ -21,7 +21,7 @@ public enum TransformacaoImagem {
     public String toString() {
         return displayName;
     }
-    
+
     public String toPersistentString() {
         return this.name(); // Salva o nome da constante enum (e.g., "ESPELHAR_HORIZONTAL")
     }

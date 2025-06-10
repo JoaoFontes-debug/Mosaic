@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class ServicoArmazenamentoNuvem {
+
     private Cloudinary cloudinary;
     private String activeCloudinaryUrl; // Para rastrear a URL usada na inicialização
 
@@ -27,7 +28,7 @@ public class ServicoArmazenamentoNuvem {
             System.err.println("ServicoArmazenamentoNuvem: CloudinaryConfig não retornou uma instância. Cloudinary não está configurado.");
         }
     }
-    
+
     private void initialize(String cloudinaryUrl) {
         if (cloudinaryUrl != null && !cloudinaryUrl.trim().isEmpty()) {
             try {
@@ -45,18 +46,18 @@ public class ServicoArmazenamentoNuvem {
                     this.activeCloudinaryUrl = null;
                 } else {
                     this.activeCloudinaryUrl = "config_default_fallback"; // Placeholder
-                     System.out.println("ServicoArmazenamentoNuvem: Cloudinary inicializado com configuração padrão (fallback).");
+                    System.out.println("ServicoArmazenamentoNuvem: Cloudinary inicializado com configuração padrão (fallback).");
                 }
             }
         } else {
             System.out.println("ServicoArmazenamentoNuvem: Nenhuma URL Cloudinary fornecida na inicialização, usando configuração padrão (CloudinaryConfig).");
             this.cloudinary = CloudinaryConfig.getCloudinaryInstance();
-             if (this.cloudinary == null) {
+            if (this.cloudinary == null) {
                 System.err.println("ServicoArmazenamentoNuvem: CloudinaryConfig não retornou uma instância. Cloudinary não está configurado.");
                 this.activeCloudinaryUrl = null;
             } else {
-                 this.activeCloudinaryUrl = "config_default_no_url_param"; // Placeholder
-                 System.out.println("ServicoArmazenamentoNuvem: Cloudinary inicializado com configuração padrão (sem URL no construtor).");
+                this.activeCloudinaryUrl = "config_default_no_url_param"; // Placeholder
+                System.out.println("ServicoArmazenamentoNuvem: Cloudinary inicializado com configuração padrão (sem URL no construtor).");
             }
         }
     }
@@ -65,7 +66,7 @@ public class ServicoArmazenamentoNuvem {
         System.out.println("ServicoArmazenamentoNuvem: Tentando reinicializar Cloudinary com URL: " + cloudinaryUrl);
         initialize(cloudinaryUrl);
     }
-    
+
     public String getActiveCloudinaryUrl() {
         return activeCloudinaryUrl;
     }
@@ -76,10 +77,10 @@ public class ServicoArmazenamentoNuvem {
         }
         try {
             Map<?, ?> params = ObjectUtils.asMap(
-                "public_id", nomeArquivoPublico, 
-                "overwrite", true,
-                "resource_type", "image"
-                // Outras opções podem ser adicionadas aqui, como tags, pastas, etc.
+                    "public_id", nomeArquivoPublico,
+                    "overwrite", true,
+                    "resource_type", "image"
+            // Outras opções podem ser adicionadas aqui, como tags, pastas, etc.
             );
             Map<?, ?> uploadResult = cloudinary.uploader().upload(imagemBytes, params);
             return (String) uploadResult.get("url");

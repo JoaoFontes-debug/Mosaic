@@ -1,4 +1,3 @@
-
 package com.joaofontes.mosaic.DAO;
 
 /**
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MesclagemDAO {
+
     private final Connection conexao;
 
     public MesclagemDAO(Connection conexao) {

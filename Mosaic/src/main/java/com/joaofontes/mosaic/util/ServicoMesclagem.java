@@ -1,4 +1,3 @@
-
 package com.joaofontes.mosaic.util;
 
 import com.joaofontes.mosaic.model.ConfiguracaoCaptura;
@@ -19,10 +18,13 @@ import java.util.List;
 public class ServicoMesclagem {
 
     /**
-     * Mescla uma lista de imagens com base na configuração fornecida.
-     * As transformações individuais são aplicadas a cada imagem antes da mesclagem.
+     * Mescla uma lista de imagens com base na configuração fornecida. As
+     * transformações individuais são aplicadas a cada imagem antes da
+     * mesclagem.
+     *
      * @param imagens A lista de BufferedImages a serem mescladas.
-     * @param config As configurações de captura, incluindo direção da mesclagem e transformações.
+     * @param config As configurações de captura, incluindo direção da mesclagem
+     * e transformações.
      * @return Uma única BufferedImage resultante da mesclagem.
      */
     public BufferedImage mesclarImagens(List<BufferedImage> imagens, ConfiguracaoCaptura config) {
@@ -34,11 +36,11 @@ public class ServicoMesclagem {
 
         // Aplicar transformações individuais a cada imagem
         List<BufferedImage> imagensTransformadas = aplicarTransformacoesIndividuais(imagens, config);
-        
+
         // Calcular dimensões da imagem final
         int larguraTotal = 0;
         int alturaTotal = 0;
-        
+
         // Usa getDirecaoMesclagemEnum() para comparação correta com a enum
         DirecaoMesclagem direcao = config.getDirecaoMesclagemEnum();
         if (direcao == null) {
@@ -47,7 +49,9 @@ public class ServicoMesclagem {
         }
 
         for (BufferedImage img : imagensTransformadas) {
-            if (img == null) continue; // Pula imagens nulas que podem ter vindo de transformações falhas
+            if (img == null) {
+                continue; // Pula imagens nulas que podem ter vindo de transformações falhas
+            }
             if (direcao == DirecaoMesclagem.HORIZONTAL) {
                 larguraTotal += img.getWidth();
                 alturaTotal = Math.max(alturaTotal, img.getHeight());
@@ -61,16 +65,18 @@ public class ServicoMesclagem {
             System.err.println("ServicoMesclagem: Dimensões calculadas para imagem final são inválidas (<=0).");
             return new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB); // Retorna imagem mínima
         }
-        
+
         // Criar imagem final
         BufferedImage imagemMesclada = new BufferedImage(
-            larguraTotal, alturaTotal, BufferedImage.TYPE_INT_RGB); // Usar TYPE_INT_ARGB se precisar de transparência
-        
+                larguraTotal, alturaTotal, BufferedImage.TYPE_INT_RGB); // Usar TYPE_INT_ARGB se precisar de transparência
+
         Graphics2D g = imagemMesclada.createGraphics();
         int posicaoAtual = 0; // Posição x para horizontal, y para vertical
-        
+
         for (BufferedImage img : imagensTransformadas) {
-            if (img == null) continue;
+            if (img == null) {
+                continue;
+            }
             if (direcao == DirecaoMesclagem.HORIZONTAL) {
                 g.drawImage(img, posicaoAtual, 0, null);
                 posicaoAtual += img.getWidth();
@@ -79,7 +85,7 @@ public class ServicoMesclagem {
                 posicaoAtual += img.getHeight();
             }
         }
-        
+
         g.dispose();
 
         // Aplicar transformação global à imagem mesclada final, se houver
@@ -90,18 +96,21 @@ public class ServicoMesclagem {
 
         return imagemMesclada;
     }
-    
+
     /**
      * Aplica transformações individuais a cada imagem na lista.
+     *
      * @param imagens Lista de imagens originais.
      * @param config Configurações que definem qual transformação aplicar.
      * @return Lista de imagens transformadas.
      */
     private List<BufferedImage> aplicarTransformacoesIndividuais(
-        List<BufferedImage> imagens, ConfiguracaoCaptura config) {
-        
+            List<BufferedImage> imagens, ConfiguracaoCaptura config) {
+
         List<BufferedImage> resultado = new ArrayList<>();
-        if (imagens == null) return resultado;
+        if (imagens == null) {
+            return resultado;
+        }
 
         for (int i = 0; i < imagens.size(); i++) {
             BufferedImage img = imagens.get(i);
@@ -111,18 +120,20 @@ public class ServicoMesclagem {
             }
             // getTransformacaoParaImagem(i) deve retornar a TransformacaoImagem para a imagem no índice i.
             // Na implementação atual de ConfiguracaoCaptura, ele retorna a 'transformacaoPadrao'.
-            TransformacaoImagem transform = config.getTransformacaoParaImagem(i); 
+            TransformacaoImagem transform = config.getTransformacaoParaImagem(i);
             resultado.add(aplicarTransformacaoUnica(img, transform));
         }
-        
+
         return resultado;
     }
-    
+
     /**
      * Aplica uma única transformação a uma BufferedImage.
+     *
      * @param img A imagem original.
      * @param transform A transformação a ser aplicada.
-     * @return A imagem transformada, ou a original se a transformação for NENHUMA ou nula.
+     * @return A imagem transformada, ou a original se a transformação for
+     * NENHUMA ou nula.
      */
     private BufferedImage aplicarTransformacaoUnica(BufferedImage img, TransformacaoImagem transform) {
         if (img == null || transform == null) {
@@ -145,32 +156,39 @@ public class ServicoMesclagem {
                 return img; // Nenhuma transformação ou transformação desconhecida
         }
     }
-    
+
     private BufferedImage espelharHorizontal(BufferedImage img) {
-        if (img == null) return null;
+        if (img == null) {
+            return null;
+        }
         AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
         tx.translate(-img.getWidth(), 0);
         AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         // Cria uma nova imagem para o resultado para evitar modificar a original se ela for usada em outro lugar
-        return op.filter(img, null); 
+        return op.filter(img, null);
     }
-    
+
     private BufferedImage espelharVertical(BufferedImage img) {
-        if (img == null) return null;
+        if (img == null) {
+            return null;
+        }
         AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
         tx.translate(0, -img.getHeight());
         AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
         return op.filter(img, null);
     }
-    
+
     /**
      * Rotaciona uma imagem em torno do seu centro.
+     *
      * @param img A imagem a ser rotacionada.
      * @param anguloRadianos O ângulo de rotação em radianos.
      * @return A imagem rotacionada.
      */
     private BufferedImage rotacionar(BufferedImage img, double anguloRadianos) {
-        if (img == null) return null;
+        if (img == null) {
+            return null;
+        }
 
         final double sin = Math.abs(Math.sin(anguloRadianos));
         final double cos = Math.abs(Math.cos(anguloRadianos));
@@ -181,7 +199,7 @@ public class ServicoMesclagem {
 
         BufferedImage imagemRotacionada = new BufferedImage(newW, newH, img.getType()); // Ou TYPE_INT_ARGB
         Graphics2D g2d = imagemRotacionada.createGraphics();
-        
+
         // Configurações para melhor qualidade de rotação
         g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
         g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);

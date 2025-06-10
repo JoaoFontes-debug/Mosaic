@@ -1,4 +1,3 @@
-
 package com.joaofontes.mosaic.model;
 
 /**
@@ -10,10 +9,11 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Represents a single inspection, which contains a name, a description,
- * and can have multiple merged images associated with it.
+ * Represents a single inspection, which contains a name, a description, and can
+ * have multiple merged images associated with it.
  */
 public class Inspecao {
+
     private int id;
     private String nomePeca;
     private String descricao;

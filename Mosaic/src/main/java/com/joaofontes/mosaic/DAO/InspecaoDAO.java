@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InspecaoDAO {
+
     private final Connection conexao;
 
     public InspecaoDAO(Connection conexao) {
