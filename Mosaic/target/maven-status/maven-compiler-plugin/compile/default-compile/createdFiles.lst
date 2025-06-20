@@ -1,5 +1,6 @@
 com\joaofontes\mosaic\model\Mesclagem.class
 com\joaofontes\mosaic\util\SeletorAreaCaptura$2.class
+com\joaofontes\mosaic\view\PainelControleFlutuante.class
 com\joaofontes\mosaic\model\ConfiguracaoCaptura.class
 com\joaofontes\mosaic\model\TransformacaoImagem.class
 com\joaofontes\mosaic\view\PainelInspecoes$2.class
@@ -13,6 +14,7 @@ com\joaofontes\mosaic\util\CloudinaryConfig.class
 com\joaofontes\mosaic\controller\ControladorPrincipal.class
 com\joaofontes\mosaic\view\PainelCaptura.class
 com\joaofontes\mosaic\view\PainelConfiguracao$1.class
+com\joaofontes\mosaic\view\PainelControleFlutuante$1.class
 com\joaofontes\mosaic\util\SeletorAreaCaptura$3.class
 com\joaofontes\mosaic\util\ServicoMesclagem.class
 com\joaofontes\mosaic\view\PainelInspecoes.class

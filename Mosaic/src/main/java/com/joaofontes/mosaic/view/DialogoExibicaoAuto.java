@@ -4,28 +4,26 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 
 public class DialogoExibicaoAuto extends JDialog {
-
-    // private BufferedImage imagem; // Removido, pois o JLabel já a contém
-    private int tempoRestante;
+    private int tempoRestante; 
     private Timer temporizadorFechamento;
-    private JLabel labelTempo;
-    private Runnable onDialogCloseAction;
+    private final Runnable onDialogCloseAction; 
 
     public DialogoExibicaoAuto(JFrame parent, BufferedImage imagem, int segundosExibicao, Runnable onDialogCloseAction) {
-        super(parent, "Imagem Mesclada", false);
-        // this.imagem = imagem; // Removido
+        super(parent, "Imagem Mesclada", false); 
         this.tempoRestante = segundosExibicao;
         this.onDialogCloseAction = onDialogCloseAction;
-        initUI(imagem); // Passa a imagem para initUI
+        initUI(imagem);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -40,39 +38,38 @@ public class DialogoExibicaoAuto extends JDialog {
         });
     }
 
-    private void initUI(BufferedImage imagemParaExibir) { // Recebe a imagem
+    private void initUI(BufferedImage imagemParaExibir) {
         setLayout(new BorderLayout());
 
         JLabel labelImagem = new JLabel(new ImageIcon(imagemParaExibir));
         labelImagem.setHorizontalAlignment(SwingConstants.CENTER);
-        add(labelImagem, BorderLayout.CENTER);
+        
+        JScrollPane scrollPane = new JScrollPane(labelImagem);
+        scrollPane.setBorder(null);
+        add(scrollPane, BorderLayout.CENTER);
 
-        labelTempo = new JLabel("Fechando em " + tempoRestante + "s", SwingConstants.CENTER);
+        JLabel labelTempo = new JLabel("", SwingConstants.CENTER);
         add(labelTempo, BorderLayout.SOUTH);
 
         if (tempoRestante > 0) {
+            labelTempo.setText("Fechando em " + tempoRestante + "s");
             temporizadorFechamento = new Timer(1000, e -> {
                 tempoRestante--;
                 if (tempoRestante >= 0) {
                     labelTempo.setText("Fechando em " + tempoRestante + "s");
                 } else {
                     ((Timer) e.getSource()).stop();
-                    dispose();
+                    dispose(); 
                 }
             });
             temporizadorFechamento.start();
-        } else { // Se tempoRestante for 0 ou menos, não inicia o timer e permite fechar manualmente
+        } else {
             labelTempo.setText("Imagem Mesclada (feche manualmente)");
         }
-
-        // Ajusta o tamanho do diálogo ao conteúdo
-        pack();
-        // Garante um tamanho mínimo ou preferido
-        int prefWidth = Math.max(300, imagemParaExibir.getWidth() + 40); // Adiciona um pouco de padding
-        int prefHeight = Math.max(200, imagemParaExibir.getHeight() + 70); // Espaço para o contador e padding
-        setPreferredSize(new Dimension(prefWidth, prefHeight));
-        pack();
-        setLocationRelativeTo(getParent());
+        
+        // CORREÇÃO: Maximiza o JDialog manualmente para preencher o ecrã.
+        Dimension tamanhoTela = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setBounds(0, 0, tamanhoTela.width, tamanhoTela.height);
     }
 
     public void exibir() {

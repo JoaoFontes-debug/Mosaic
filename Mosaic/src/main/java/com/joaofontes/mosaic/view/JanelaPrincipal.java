@@ -3,6 +3,9 @@ package com.joaofontes.mosaic.view;
 import com.joaofontes.mosaic.controller.ControladorPrincipal;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -12,10 +15,6 @@ import java.net.URL;
 public class JanelaPrincipal extends JFrame {
     private static JanelaPrincipal instancia;
     private final ControladorPrincipal controlador;
-    private PainelCaptura painelCaptura;
-    private PainelMetadados painelMetadados;
-    private PainelConfiguracao painelConfiguracao;
-    private PainelInspecoes painelInspecoes;
 
     private JanelaPrincipal() {
         this.controlador = new ControladorPrincipal(); 
@@ -32,45 +31,53 @@ public class JanelaPrincipal extends JFrame {
     private void initUI() {
         configurarJanela();
         JTabbedPane abas = new JTabbedPane();
-        painelCaptura = new PainelCaptura(controlador);
-        painelMetadados = new PainelMetadados(controlador);
-        painelConfiguracao = new PainelConfiguracao(controlador);
-        painelInspecoes = new PainelInspecoes(controlador);
-
-        abas.addTab("Captura", painelCaptura);
-        abas.addTab("Detalhes da Inspeção", painelMetadados);
-        abas.addTab("Configurações", painelConfiguracao);
-        abas.addTab("Inspeções Salvas", painelInspecoes);
-
+        abas.addTab("Captura", new PainelCaptura(controlador));
+        abas.addTab("Metadados da Inspeção", new PainelMetadados(controlador));
+        abas.addTab("Configurações", new PainelConfiguracao(controlador));
+        abas.addTab("Inspeções Salvas", new PainelInspecoes(controlador));
         add(abas, BorderLayout.CENTER);
     }
 
     private void configurarJanela() {
         setTitle("Sistema MOSAIC");
-        
-        // ALTERAÇÃO: Aumentei o tamanho da janela para melhor acomodar os componentes.
         setSize(950, 700);
-        setMinimumSize(new Dimension(950, 700)); // Impede que a janela seja redimensionada para um tamanho menor
-
-        setResizable(true); // Permitir redimensionamento pode ser útil, mas mantendo um mínimo.
+        setMinimumSize(new Dimension(950, 700));
+        setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centraliza na tela
-        
-        URL iconURL = getClass().getResource("/images/Logo_Mosaic.png");
-        if (iconURL != null) {
-            setIconImage(new ImageIcon(iconURL).getImage());
-        } else {
-            System.err.println("Ícone da aplicação não encontrado em /com/joaofontes/mosaic/icons/Logo_Mosaic.png");
-        }
+        setLocationRelativeTo(null);
+        URL iconURL = getClass().getResource("/images/Logo_Mosaic.jpg"); 
+        if (iconURL != null) setIconImage(new ImageIcon(iconURL).getImage());
     }
 
     public void exibirImagemMesclada(BufferedImage imagem) {
-        Runnable resumeCaptureAction = () -> {
-            if (controlador.getConfiguracao().getAreaCaptura() != null) {
-                 controlador.reiniciarCapturaPosExibicao();
-            }
+        BufferedImage imagemParaExibir = redimensionarImagemParaTela(imagem);
+
+        // ALTERAÇÃO: A lógica do Timer foi movida para o ControladorPrincipal.
+        // O Runnable agora simplesmente notifica o controlador que o diálogo foi fechado.
+        Runnable onDialogCloseAction = () -> {
+            System.out.println("Janela de exibição fechada. Notificando controlador para reiniciar a captura com atraso.");
+            controlador.iniciarContagemParaReiniciar();
         };
-        DialogoExibicaoAuto dialogo = new DialogoExibicaoAuto(this, imagem, controlador.getConfiguracao().getTempoFechamentoAuto(), resumeCaptureAction);
+
+        DialogoExibicaoAuto dialogo = new DialogoExibicaoAuto(this, imagemParaExibir, controlador.getConfiguracao().getTempoFechamentoAuto(), onDialogCloseAction);
         dialogo.exibir(); 
+    }
+    
+    private BufferedImage redimensionarImagemParaTela(BufferedImage imagemOriginal) {
+        Dimension tamanhoTela = Toolkit.getDefaultToolkit().getScreenSize();
+        int larguraMaxima = (int) (tamanhoTela.width * 0.9);
+        int alturaMaxima = (int) (tamanhoTela.height * 0.9);
+        if (imagemOriginal.getWidth() <= larguraMaxima && imagemOriginal.getHeight() <= alturaMaxima) {
+            return imagemOriginal;
+        }
+        double ratio = Math.min((double) larguraMaxima / imagemOriginal.getWidth(), (double) alturaMaxima / imagemOriginal.getHeight());
+        int novaLargura = (int) (imagemOriginal.getWidth() * ratio);
+        int novaAltura = (int) (imagemOriginal.getHeight() * ratio);
+        Image imagemRedimensionada = imagemOriginal.getScaledInstance(novaLargura, novaAltura, Image.SCALE_SMOOTH);
+        BufferedImage novaImagemBuffer = new BufferedImage(novaLargura, novaAltura, imagemOriginal.getType());
+        Graphics2D g2d = novaImagemBuffer.createGraphics();
+        g2d.drawImage(imagemRedimensionada, 0, 0, null);
+        g2d.dispose();
+        return novaImagemBuffer;
     }
 }

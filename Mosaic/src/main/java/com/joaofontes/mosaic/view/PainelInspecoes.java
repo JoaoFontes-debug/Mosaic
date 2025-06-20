@@ -8,8 +8,8 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -35,6 +35,7 @@ public class PainelInspecoes extends JPanel {
     private void initUI() {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
         add(criarPainelFiltros(), BorderLayout.NORTH);
         
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
@@ -43,47 +44,37 @@ public class PainelInspecoes extends JPanel {
         splitPane.setResizeWeight(0.5);
         add(splitPane, BorderLayout.CENTER);
 
-        // ALTERAÇÃO: Cria e adiciona o menu de contexto para as tabelas
+        // Adiciona o menu de contexto para copiar
         criarEMostrarMenuDeCopia();
     }
 
-    /**
-     * NOVO MÉTODO: Cria um menu de popup para copiar o conteúdo de uma célula.
-     */
     private void criarEMostrarMenuDeCopia() {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem itemCopiar = new JMenuItem("Copiar");
         popupMenu.add(itemCopiar);
 
-        // Ação que será executada quando o item "Copiar" for clicado
         itemCopiar.addActionListener(ae -> {
-            // Descobre qual tabela foi clicada (a que invocou o popup)
             JTable tabelaFonte = (JTable) popupMenu.getInvoker();
-            int linhaSelecionada = tabelaFonte.getSelectedRow();
-            int colunaSelecionada = tabelaFonte.getSelectedColumn();
+            int linha = tabelaFonte.getSelectedRow();
+            int coluna = tabelaFonte.getSelectedColumn();
             
-            if (linhaSelecionada != -1 && colunaSelecionada != -1) {
-                // Obtém o valor da célula
-                Object valorCelula = tabelaFonte.getValueAt(linhaSelecionada, colunaSelecionada);
-                String textoParaCopiar = (valorCelula == null) ? "" : valorCelula.toString();
-
-                // Copia o texto para a área de transferência do sistema
-                StringSelection selecaoString = new StringSelection(textoParaCopiar);
+            if (linha != -1 && coluna != -1) {
+                Object valor = tabelaFonte.getValueAt(linha, coluna);
+                String texto = (valor == null) ? "" : valor.toString();
+                StringSelection selecao = new StringSelection(texto);
                 Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                clipboard.setContents(selecaoString, null);
+                clipboard.setContents(selecao, null);
             }
         });
 
-        // Adaptador de rato para mostrar o popup menu com o clique direito
         MouseAdapter adaptadorMouse = new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
-                if (e.isPopupTrigger()) { // Verifica se é um clique de popup (geralmente direito)
+                if (e.isPopupTrigger()) {
                     JTable tabelaFonte = (JTable) e.getSource();
                     int linha = tabelaFonte.rowAtPoint(e.getPoint());
                     int coluna = tabelaFonte.columnAtPoint(e.getPoint());
 
-                    // Seleciona a célula sob o cursor antes de mostrar o menu
                     if (linha >= 0 && coluna >= 0) {
                         tabelaFonte.changeSelection(linha, coluna, false, false);
                     }
@@ -93,7 +84,6 @@ public class PainelInspecoes extends JPanel {
             }
         };
 
-        // Adiciona o listener a ambas as tabelas
         tabelaInspecoes.addMouseListener(adaptadorMouse);
         tabelaMesclagens.addMouseListener(adaptadorMouse);
     }
@@ -129,7 +119,8 @@ public class PainelInspecoes extends JPanel {
         return painel;
     }
 
-    private JScrollPane criarPainelTabelaInspecoes() {
+    private JPanel criarPainelTabelaInspecoes() {
+        JPanel painel = new JPanel(new BorderLayout(0, 5));
         String[] colunas = {"ID", "Nome da Peça", "Descrição", "Data de Criação"};
         modeloInspecoes = new DefaultTableModel(colunas, 0) { @Override public boolean isCellEditable(int r, int c) { return false; }};
         tabelaInspecoes = new JTable(modeloInspecoes);
@@ -137,16 +128,33 @@ public class PainelInspecoes extends JPanel {
         tabelaInspecoes.getSelectionModel().addListSelectionListener(this::onInspecaoSelecionada);
         JScrollPane scrollPane = new JScrollPane(tabelaInspecoes);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Inspeções"));
-        return scrollPane;
+        
+        JPanel painelAcoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton btnApagarInspecao = new JButton("Apagar Inspeção Selecionada");
+        btnApagarInspecao.addActionListener(e -> apagarInspecaoSelecionada());
+        painelAcoes.add(btnApagarInspecao);
+
+        painel.add(scrollPane, BorderLayout.CENTER);
+        painel.add(painelAcoes, BorderLayout.SOUTH);
+        return painel;
     }
     
-    private JScrollPane criarPainelTabelaMesclagens() {
+    private JPanel criarPainelTabelaMesclagens() {
+        JPanel painel = new JPanel(new BorderLayout(0, 5));
         String[] colunas = {"ID", "Data da Captura", "URL Nuvem", "Caminho Local"};
         modeloMesclagens = new DefaultTableModel(colunas, 0) { @Override public boolean isCellEditable(int r, int c) { return false; }};
         tabelaMesclagens = new JTable(modeloMesclagens);
         JScrollPane scrollPane = new JScrollPane(tabelaMesclagens);
         scrollPane.setBorder(BorderFactory.createTitledBorder("Imagens Mescladas da Inspeção Selecionada"));
-        return scrollPane;
+        
+        JPanel painelAcoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton btnApagarMesclagem = new JButton("Apagar Mesclagem Selecionada");
+        btnApagarMesclagem.addActionListener(e -> apagarMesclagemSelecionada());
+        painelAcoes.add(btnApagarMesclagem);
+
+        painel.add(scrollPane, BorderLayout.CENTER);
+        painel.add(painelAcoes, BorderLayout.SOUTH);
+        return painel;
     }
 
     private void onInspecaoSelecionada(ListSelectionEvent event) {
@@ -154,9 +162,48 @@ public class PainelInspecoes extends JPanel {
             int selectedRow = tabelaInspecoes.convertRowIndexToModel(tabelaInspecoes.getSelectedRow());
             int idInspecao = (Integer) modeloInspecoes.getValueAt(selectedRow, 0);
             carregarMesclagens(idInspecao);
+        } else {
+            modeloMesclagens.setRowCount(0);
         }
     }
 
+    private void apagarInspecaoSelecionada() {
+        int linhaSelecionada = tabelaInspecoes.getSelectedRow();
+        if (linhaSelecionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma inspeção para apagar.", "Nenhuma Seleção", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        int idInspecao = (Integer) modeloInspecoes.getValueAt(linhaSelecionada, 0);
+        String nomePeca = (String) modeloInspecoes.getValueAt(linhaSelecionada, 1);
+        
+        int confirmacao = JOptionPane.showConfirmDialog(this, 
+            "Tem a certeza que deseja apagar a inspeção '" + nomePeca + "' e TODAS as suas imagens mescladas?",
+            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        
+        if (confirmacao == JOptionPane.YES_OPTION) {
+            controlador.deletarInspecao(idInspecao);
+            carregarTodasInspecoes();
+        }
+    }
+
+    private void apagarMesclagemSelecionada() {
+        int linhaMesclagemSelecionada = tabelaMesclagens.getSelectedRow();
+        if (linhaMesclagemSelecionada == -1) {
+            JOptionPane.showMessageDialog(this, "Por favor, selecione uma imagem mesclada para apagar.", "Nenhuma Seleção", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        int idMesclagem = (Integer) modeloMesclagens.getValueAt(linhaMesclagemSelecionada, 0);
+        
+        int confirmacao = JOptionPane.showConfirmDialog(this, 
+            "Tem a certeza que deseja apagar esta imagem mesclada?",
+            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        
+        if (confirmacao == JOptionPane.YES_OPTION) {
+            controlador.deletarMesclagem(idMesclagem);
+            carregarTodasInspecoes();
+        }
+    }
+    
     private void carregarMesclagens(int idInspecao) {
         try {
             List<Mesclagem> mesclagens = controlador.carregarMesclagensPorInspecao(idInspecao);
@@ -176,11 +223,9 @@ public class PainelInspecoes extends JPanel {
     private void buscarInspecoesComFiltro() {
         try {
             modeloMesclagens.setRowCount(0);
-            
             String nomePeca = campoNomePecaFiltro.getText().trim();
             Date dataInicio = parseDate(campoDataInicioFiltro.getText());
             Date dataFim = parseDate(campoDataFimFiltro.getText());
-
             List<Inspecao> inspecoes = controlador.carregarInspecoes(nomePeca.isEmpty() ? null : nomePeca, dataInicio, dataFim);
             atualizarTabelaInspecoes(inspecoes);
         } catch (ParseException e) {

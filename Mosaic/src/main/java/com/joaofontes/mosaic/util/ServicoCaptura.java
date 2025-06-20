@@ -12,28 +12,24 @@ import javax.swing.SwingUtilities;
 
 public class ServicoCaptura {
 
-    private ControladorPrincipal controlador;
+    private final ControladorPrincipal controlador;
     private Timer temporizador;
-    private Robot robot;
+    private final Robot robot;
     private Rectangle areaCapturaAtual;
     private BufferedImage imagemAnterior;
     private boolean capturando = false;
-    private int larguraAnterior = 0;
-    private int alturaAnterior = 0;
 
     public ServicoCaptura(ControladorPrincipal controlador) {
         this.controlador = controlador;
         try {
             this.robot = new Robot();
         } catch (AWTException e) {
-            System.err.println("Erro crítico ao criar Robot para captura de tela: " + e.getMessage());
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao iniciar serviço de captura", e);
         }
     }
 
     public void iniciarCaptura(ConfiguracaoCaptura config, Rectangle area) {
-        if (robot == null || area == null || area.width <= 0 || area.height <= 0) {
-            System.err.println("Serviço de captura não pode ser iniciado. Robot ou área inválida.");
+        if (area == null || area.width <= 0 || area.height <= 0) {
             return;
         }
         if (capturando) {
@@ -41,13 +37,10 @@ public class ServicoCaptura {
         }
         this.areaCapturaAtual = area;
         this.imagemAnterior = null;
-        this.larguraAnterior = 0;
-        this.alturaAnterior = 0;
-        temporizador = new Timer(config.getTempoEntreCapturasMs(), e -> capturarTela());
+        temporizador = new Timer(config.getTempoEntreCapturasMs(), e -> capturarTela(config));
         temporizador.setInitialDelay(0);
         temporizador.start();
         capturando = true;
-        System.out.println("Serviço de captura iniciado. Intervalo de Verificação: " + config.getTempoEntreCapturasMs() + "ms");
     }
 
     public void pararCaptura() {
@@ -55,50 +48,62 @@ public class ServicoCaptura {
             temporizador.stop();
         }
         capturando = false;
-        System.out.println("Serviço de captura parado.");
     }
 
     public boolean isCapturando() {
         return capturando;
     }
 
-    private void capturarTela() {
+    private void capturarTela(ConfiguracaoCaptura config) {
         if (areaCapturaAtual == null) {
             pararCaptura();
             return;
         }
         try {
             BufferedImage imagemAtual = robot.createScreenCapture(areaCapturaAtual);
-            if (imagemAnterior == null || imagemMudou(imagemAnterior, imagemAtual)) {
-                // ALTERAÇÃO: Chama o novo método do controlador para acumular imagens.
+            if (imagemMudou(imagemAtual, config.getLimiarMudanca())) {
                 controlador.onNovaImagemDetectada(imagemAtual);
-                imagemAnterior = imagemAtual;
-                larguraAnterior = imagemAtual.getWidth();
-                alturaAnterior = imagemAtual.getHeight();
             }
+            imagemAnterior = imagemAtual;
         } catch (Exception e) {
-            System.err.println("Erro durante a captura de tela: " + e.getMessage());
             pararCaptura();
-            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null,
-                    "Ocorreu um erro durante a captura da tela.\nA captura foi interrompida.",
-                    "Erro de Captura", JOptionPane.ERROR_MESSAGE));
+            SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "Erro na captura: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE));
         }
     }
 
-    private boolean imagemMudou(BufferedImage img1, BufferedImage img2) {
-        if (img1.getWidth() != img2.getWidth() || img1.getHeight() != img2.getHeight()) {
-            if (img1.getWidth() != larguraAnterior || img1.getHeight() != alturaAnterior) {
-                return true;
+    private boolean imagemMudou(BufferedImage novaImagem, double limiar) {
+        if (imagemAnterior == null || novaImagem.getWidth() != imagemAnterior.getWidth() || novaImagem.getHeight() != imagemAnterior.getHeight()) {
+            return true;
+        }
+
+        long diff = 0;
+        int pixelsTotais = novaImagem.getWidth() * novaImagem.getHeight();
+        if (pixelsTotais == 0) {
+            return false;
+        }
+
+        for (int y = 0; y < novaImagem.getHeight(); y++) {
+            for (int x = 0; x < novaImagem.getWidth(); x++) {
+                int rgb1 = imagemAnterior.getRGB(x, y);
+                int rgb2 = novaImagem.getRGB(x, y);
+
+                int r1 = (rgb1 >> 16) & 0xff;
+                int g1 = (rgb1 >> 8) & 0xff;
+                int b1 = rgb1 & 0xff;
+
+                int r2 = (rgb2 >> 16) & 0xff;
+                int g2 = (rgb2 >> 8) & 0xff;
+                int b2 = rgb2 & 0xff;
+
+                diff += Math.abs(r1 - r2);
+                diff += Math.abs(g1 - g2);
+                diff += Math.abs(b1 - b2);
             }
         }
-        int step = Math.max(1, Math.min(img1.getWidth(), img1.getHeight()) / 20);
-        for (int x = 0; x < img1.getWidth(); x += step) {
-            for (int y = 0; y < img1.getHeight(); y += step) {
-                if (img1.getRGB(x, y) != img2.getRGB(x, y)) {
-                    return true;
-                }
-            }
-        }
-        return false;
+
+        double mediaDiferenca = diff / (double) pixelsTotais;
+        double porcentagemDiferenca = (mediaDiferenca / (255.0 * 3.0)) * 100.0;
+
+        return porcentagemDiferenca > limiar;
     }
 }

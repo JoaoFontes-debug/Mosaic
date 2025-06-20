@@ -3,13 +3,9 @@ package com.joaofontes.mosaic.model;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
-/**
- * VERSÃO CORRIGIDA: Esta versão da classe inclui os métodos baseados em String
- * para garantir a compatibilidade com a classe ConfiguracaoDAO.
- */
 public class ConfiguracaoCaptura implements Serializable {
 
-    private static final long serialVersionUID = 4L; // Versionamento
+    private static final long serialVersionUID = 6L; // Versionamento
 
     public enum StorageOption {
         LOCAL_ONLY("Apenas Local"),
@@ -31,10 +27,12 @@ public class ConfiguracaoCaptura implements Serializable {
     private Rectangle areaCaptura;
     private String diretorioCaptura;
     private int tempoEntreCapturasMs;
+    private int numeroImagensParaMesclar;
     private boolean exibicaoAutoHabilitada;
     private int tempoFechamentoAuto;
+    private int atrasoReiniciarCaptura;
+    private double limiarMudanca; // NOVO CAMPO para sensibilidade
     private StorageOption storageOption;
-    private int numeroImagensParaMesclar;
     private DirecaoMesclagem direcaoMesclagem;
     private TransformacaoImagem transformacaoPadrao;
     private TransformacaoImagem transformacaoGlobal;
@@ -43,17 +41,27 @@ public class ConfiguracaoCaptura implements Serializable {
     private String cloudApiKey;
     private String cloudApiSecret;
 
-    // Valores padrão
     public ConfiguracaoCaptura() {
         this.tempoEntreCapturasMs = 1000;
+        this.numeroImagensParaMesclar = 2;
         this.exibicaoAutoHabilitada = true;
         this.tempoFechamentoAuto = 5;
+        this.atrasoReiniciarCaptura = 5;
+        this.limiarMudanca = 1.5; // Valor padrão de sensibilidade
         this.storageOption = StorageOption.LOCAL_AND_CLOUD;
         this.diretorioCaptura = System.getProperty("user.home") + "/MosaicCapturas";
-        this.numeroImagensParaMesclar = 2;
         this.direcaoMesclagem = DirecaoMesclagem.HORIZONTAL;
         this.transformacaoPadrao = TransformacaoImagem.NENHUMA;
         this.transformacaoGlobal = TransformacaoImagem.NENHUMA;
+    }
+
+    // GETTER E SETTER PARA O NOVO CAMPO
+    public double getLimiarMudanca() {
+        return limiarMudanca;
+    }
+
+    public void setLimiarMudanca(double limiar) {
+        this.limiarMudanca = limiar;
     }
 
     // --- Getters e Setters ---
@@ -89,6 +97,14 @@ public class ConfiguracaoCaptura implements Serializable {
         this.tempoEntreCapturasMs = tempoEntreCapturasMs;
     }
 
+    public int getNumeroImagensParaMesclar() {
+        return numeroImagensParaMesclar;
+    }
+
+    public void setNumeroImagensParaMesclar(int num) {
+        this.numeroImagensParaMesclar = Math.max(2, num);
+    }
+
     public boolean isExibicaoAutoHabilitada() {
         return exibicaoAutoHabilitada;
     }
@@ -105,12 +121,40 @@ public class ConfiguracaoCaptura implements Serializable {
         this.tempoFechamentoAuto = tempoFechamentoAuto;
     }
 
+    public int getAtrasoReiniciarCaptura() {
+        return atrasoReiniciarCaptura;
+    }
+
+    public void setAtrasoReiniciarCaptura(int segundos) {
+        this.atrasoReiniciarCaptura = Math.max(0, segundos);
+    }
+
     public StorageOption getStorageOption() {
         return storageOption;
     }
 
     public void setStorageOption(StorageOption storageOption) {
         this.storageOption = storageOption;
+    }
+
+    public DirecaoMesclagem getDirecaoMesclagemEnum() {
+        return direcaoMesclagem;
+    }
+
+    public TransformacaoImagem getTransformacaoPadraoEnum() {
+        return transformacaoPadrao;
+    }
+
+    public void setTransformacaoPadrao(TransformacaoImagem transformacao) {
+        this.transformacaoPadrao = transformacao;
+    }
+
+    public TransformacaoImagem getTransformacaoGlobalEnum() {
+        return transformacaoGlobal;
+    }
+
+    public void setTransformacaoGlobal(TransformacaoImagem transformacao) {
+        this.transformacaoGlobal = transformacao;
     }
 
     public String getCloudinaryUrl() {
@@ -145,57 +189,33 @@ public class ConfiguracaoCaptura implements Serializable {
         this.cloudApiSecret = cloudApiSecret;
     }
 
-    // MÉTODOS DE COMPATIBILIDADE RESTAURADOS/ADICIONADOS
-    public int getNumeroImagensMesclagem() {
-        return numeroImagensParaMesclar;
+    public boolean isSalvarLocal() {
+        return storageOption == StorageOption.LOCAL_ONLY || storageOption == StorageOption.LOCAL_AND_CLOUD;
     }
 
-    public void setNumeroImagensMesclagem(int numero) {
-        this.numeroImagensParaMesclar = Math.max(2, numero);
+    public boolean isSalvarNuvem() {
+        return storageOption == StorageOption.CLOUD_ONLY || storageOption == StorageOption.LOCAL_AND_CLOUD;
     }
 
-    public DirecaoMesclagem getDirecaoMesclagemEnum() {
-        return direcaoMesclagem;
+    public TransformacaoImagem getTransformacaoParaImagem(int index) {
+        return getTransformacaoPadraoEnum() != null ? getTransformacaoPadraoEnum() : TransformacaoImagem.NENHUMA;
     }
 
+    // MÉTODOS DE COMPATIBILIDADE PARA O DAO
     public String getDirecaoMesclagem() {
         return direcaoMesclagem != null ? direcaoMesclagem.name() : DirecaoMesclagem.HORIZONTAL.name();
-    }
-
-    public void setDirecaoMesclagem(DirecaoMesclagem direcao) {
-        this.direcaoMesclagem = direcao;
-    }
-
-    public void setDirecaoMesclagem(String direcaoStr) {
-        this.direcaoMesclagem = DirecaoMesclagem.fromString(direcaoStr);
-    }
-
-    public TransformacaoImagem getTransformacaoPadraoEnum() {
-        return transformacaoPadrao;
     }
 
     public String getTransformacaoPadrao() {
         return transformacaoPadrao != null ? transformacaoPadrao.toPersistentString() : TransformacaoImagem.NENHUMA.toPersistentString();
     }
 
-    public void setTransformacaoPadrao(TransformacaoImagem transformacao) {
-        this.transformacaoPadrao = transformacao;
+    public void setDirecaoMesclagem(String direcaoStr) {
+        this.direcaoMesclagem = DirecaoMesclagem.fromString(direcaoStr);
     }
 
     public void setTransformacaoPadrao(String transformacaoStr) {
         this.transformacaoPadrao = TransformacaoImagem.fromString(transformacaoStr);
-    }
-
-    public TransformacaoImagem getTransformacaoGlobalEnum() {
-        return transformacaoGlobal;
-    }
-
-    public void setTransformacaoGlobal(TransformacaoImagem transformacao) {
-        this.transformacaoGlobal = transformacao;
-    }
-
-    public boolean isSalvarLocal() {
-        return storageOption == StorageOption.LOCAL_ONLY || storageOption == StorageOption.LOCAL_AND_CLOUD;
     }
 
     public void setSalvarLocal(boolean salvar) {
@@ -206,27 +226,11 @@ public class ConfiguracaoCaptura implements Serializable {
         }
     }
 
-    public boolean isSalvarNuvem() {
-        return storageOption == StorageOption.CLOUD_ONLY || storageOption == StorageOption.LOCAL_AND_CLOUD;
-    }
-
     public void setSalvarNuvem(boolean salvar) {
         if (salvar) {
             this.storageOption = isSalvarLocal() ? StorageOption.LOCAL_AND_CLOUD : StorageOption.CLOUD_ONLY;
         } else {
             this.storageOption = isSalvarLocal() ? StorageOption.LOCAL_ONLY : StorageOption.LOCAL_ONLY;
         }
-    }
-
-    public TransformacaoImagem getTransformacaoParaImagem(int index) {
-        return getTransformacaoPadraoEnum() != null ? getTransformacaoPadraoEnum() : TransformacaoImagem.NENHUMA;
-    }
-
-    public int getNumeroImagensParaMesclar() {
-        return this.numeroImagensParaMesclar;
-    }
-
-    public void setNumeroImagensParaMesclar(int num) {
-        this.numeroImagensParaMesclar = Math.max(2, num);
     }
 }
