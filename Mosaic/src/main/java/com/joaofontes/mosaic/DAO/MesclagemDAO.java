@@ -2,11 +2,14 @@ package com.joaofontes.mosaic.DAO;
 
 import com.joaofontes.mosaic.model.Mesclagem;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MesclagemDAO {
     private final Connection conexao;
+    private final SimpleDateFormat sqliteTimestampFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     public MesclagemDAO(Connection conexao) {
         this.conexao = conexao;
@@ -16,7 +19,10 @@ public class MesclagemDAO {
         String sql = "INSERT INTO mesclagens (id_inspecao, data_captura, caminho_imagem, caminho_local) VALUES (?, ?, ?, ?)";
         try (PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, mesclagem.getIdInspecao());
-            stmt.setTimestamp(2, new Timestamp(mesclagem.getDataCaptura().getTime()));
+            
+            // ALTERAÇÃO CRÍTICA: Formata a data para String antes de salvar.
+            stmt.setString(2, sqliteTimestampFormat.format(mesclagem.getDataCaptura()));
+            
             stmt.setString(3, mesclagem.getCaminhoImagem());
             stmt.setString(4, mesclagem.getCaminhoLocal());
             stmt.executeUpdate();
@@ -44,7 +50,18 @@ public class MesclagemDAO {
                 Mesclagem mesclagem = new Mesclagem();
                 mesclagem.setId(rs.getInt("id"));
                 mesclagem.setIdInspecao(rs.getInt("id_inspecao"));
-                mesclagem.setDataCaptura(rs.getTimestamp("data_captura"));
+                
+                String dataString = rs.getString("data_captura");
+                if (dataString != null) {
+                    try {
+                        mesclagem.setDataCaptura(sqliteTimestampFormat.parse(dataString));
+                    } catch (ParseException e) {
+                        System.err.println("Erro ao fazer parse da data da mesclagem: " + dataString);
+                        e.printStackTrace();
+                        mesclagem.setDataCaptura(null);
+                    }
+                }
+                
                 mesclagem.setCaminhoImagem(rs.getString("caminho_imagem"));
                 mesclagem.setCaminhoLocal(rs.getString("caminho_local"));
                 mesclagens.add(mesclagem);
