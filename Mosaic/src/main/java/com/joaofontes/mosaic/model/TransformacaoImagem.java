@@ -1,8 +1,6 @@
 package com.joaofontes.mosaic.model;
 
-/**
- * Enum para representar as transformações aplicáveis a uma imagem.
- */
+
 public enum TransformacaoImagem {
     NENHUMA("Nenhuma"),
     ESPELHAR_HORIZONTAL("Espelhar Horizontalmente"),

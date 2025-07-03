@@ -1,24 +1,31 @@
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\controller\ControladorPrincipal.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\ConfiguracaoDAO.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\DatabaseManager.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\InspecaoDAO.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\MesclagemDAO.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\ConfiguracaoCaptura.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\DirecaoMesclagem.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\Inspecao.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\Mesclagem.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\TransformacaoImagem.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\Mosaic.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\TesteDotenv.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\CloudinaryConfig.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\SeletorAreaCaptura.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\ServicoArmazenamentoNuvem.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\ServicoCaptura.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\util\ServicoMesclagem.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\DialogoExibicaoAuto.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\JanelaPrincipal.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelCaptura.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelConfiguracao.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelControleFlutuante.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelInspecoes.java
-C:\Users\JoãoFontes\Music\TCC\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelMetadados.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\controller\ControladorPrincipal.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\ConfiguracaoDAO.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\DatabaseManager.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\InspecaoDAO.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\MesclagemDAO.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\DAO\UsuarioDAO.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\ConfiguracaoCaptura.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\DirecaoMesclagem.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\Inspecao.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\Mesclagem.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\TransformacaoImagem.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\model\Usuario.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\Mosaic.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\service\CloudinaryConfig.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\service\SeletorAreaCaptura.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\service\ServicoArmazenamentoNuvem.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\service\ServicoCaptura.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\service\ServicoEmail.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\service\ServicoMesclagem.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\TesteDotenv.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\DialogoCriarUsuario.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\DialogoExibicaoAuto.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\DialogoRecuperarSenha.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\JanelaLogin.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\JanelaPrincipal.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelAdmin.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelCaptura.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelConfiguracao.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelControleFlutuante.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelInspecoes.java
+C:\Users\JoãoFontes\Music\TCC\copias de segurança\copia - teste com adm- recuperacao de senha e nivel de acesso e\Mosaic\Mosaic\Mosaic\src\main\java\com\joaofontes\mosaic\view\PainelMetadados.java

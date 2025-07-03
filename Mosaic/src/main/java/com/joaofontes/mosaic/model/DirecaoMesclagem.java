@@ -1,8 +1,6 @@
 package com.joaofontes.mosaic.model;
 
-/**
- * Enum para representar a direção da mesclagem de imagens.
- */
+
 public enum DirecaoMesclagem {
     HORIZONTAL("Horizontal"),
     VERTICAL("Vertical");

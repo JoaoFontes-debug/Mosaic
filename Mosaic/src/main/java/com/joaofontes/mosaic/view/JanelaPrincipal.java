@@ -1,29 +1,25 @@
 package com.joaofontes.mosaic.view;
 
 import com.joaofontes.mosaic.controller.ControladorPrincipal;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Toolkit;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
 import java.net.URL;
 
 public class JanelaPrincipal extends JFrame {
+
     private static JanelaPrincipal instancia;
     private final ControladorPrincipal controlador;
 
-    private JanelaPrincipal() {
-        this.controlador = new ControladorPrincipal(); 
+    private JanelaPrincipal(ControladorPrincipal controlador) {
+        this.controlador = controlador;
+        this.controlador.setJanelaPrincipal(this);
         initUI();
     }
 
-    public static JanelaPrincipal getInstance() {
+    public static JanelaPrincipal getInstance(ControladorPrincipal controlador) {
         if (instancia == null) {
-            instancia = new JanelaPrincipal();
+            instancia = new JanelaPrincipal(controlador);
         }
         return instancia;
     }
@@ -31,10 +27,17 @@ public class JanelaPrincipal extends JFrame {
     private void initUI() {
         configurarJanela();
         JTabbedPane abas = new JTabbedPane();
+
         abas.addTab("Captura", new PainelCaptura(controlador));
         abas.addTab("Metadados da Inspeção", new PainelMetadados(controlador));
         abas.addTab("Configurações", new PainelConfiguracao(controlador));
         abas.addTab("Inspeções Salvas", new PainelInspecoes(controlador));
+
+        if (controlador.isUsuarioAdmin()) {
+            abas.addTab("Administração", new PainelAdmin(controlador));
+            System.out.println("Utilizador admin detetado. A carregar painel de administração.");
+        }
+
         add(abas, BorderLayout.CENTER);
     }
 
@@ -45,24 +48,22 @@ public class JanelaPrincipal extends JFrame {
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        URL iconURL = getClass().getResource("/images/Logo_Mosaic.jpg"); 
-        if (iconURL != null) setIconImage(new ImageIcon(iconURL).getImage());
+        URL iconURL = getClass().getResource("/images/Logo_Mosaic.jpg");
+        if (iconURL != null) {
+            setIconImage(new ImageIcon(iconURL).getImage());
+        }
     }
 
     public void exibirImagemMesclada(BufferedImage imagem) {
         BufferedImage imagemParaExibir = redimensionarImagemParaTela(imagem);
-
-        // ALTERAÇÃO: A lógica do Timer foi movida para o ControladorPrincipal.
-        // O Runnable agora simplesmente notifica o controlador que o diálogo foi fechado.
         Runnable onDialogCloseAction = () -> {
             System.out.println("Janela de exibição fechada. Notificando controlador para reiniciar a captura com atraso.");
             controlador.iniciarContagemParaReiniciar();
         };
-
         DialogoExibicaoAuto dialogo = new DialogoExibicaoAuto(this, imagemParaExibir, controlador.getConfiguracao().getTempoFechamentoAuto(), onDialogCloseAction);
-        dialogo.exibir(); 
+        dialogo.exibir();
     }
-    
+
     private BufferedImage redimensionarImagemParaTela(BufferedImage imagemOriginal) {
         Dimension tamanhoTela = Toolkit.getDefaultToolkit().getScreenSize();
         int larguraMaxima = (int) (tamanhoTela.width * 0.9);

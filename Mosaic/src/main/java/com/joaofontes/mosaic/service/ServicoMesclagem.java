@@ -1,4 +1,4 @@
-package com.joaofontes.mosaic.util;
+package com.joaofontes.mosaic.service;
 
 import com.joaofontes.mosaic.model.ConfiguracaoCaptura;
 import com.joaofontes.mosaic.model.DirecaoMesclagem;
@@ -17,16 +17,7 @@ import java.util.List;
  */
 public class ServicoMesclagem {
 
-    /**
-     * Mescla uma lista de imagens com base na configuração fornecida. As
-     * transformações individuais são aplicadas a cada imagem antes da
-     * mesclagem.
-     *
-     * @param imagens A lista de BufferedImages a serem mescladas.
-     * @param config As configurações de captura, incluindo direção da mesclagem
-     * e transformações.
-     * @return Uma única BufferedImage resultante da mesclagem.
-     */
+    
     public BufferedImage mesclarImagens(List<BufferedImage> imagens, ConfiguracaoCaptura config) {
         if (imagens == null || imagens.isEmpty()) {
             System.err.println("ServicoMesclagem: Lista de imagens para mesclar está vazia ou nula.");

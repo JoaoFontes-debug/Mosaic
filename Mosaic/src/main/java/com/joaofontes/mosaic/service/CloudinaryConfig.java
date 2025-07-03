@@ -1,4 +1,4 @@
-package com.joaofontes.mosaic.util;
+package com.joaofontes.mosaic.service;
 
 import com.cloudinary.Cloudinary;
 import io.github.cdimascio.dotenv.Dotenv;

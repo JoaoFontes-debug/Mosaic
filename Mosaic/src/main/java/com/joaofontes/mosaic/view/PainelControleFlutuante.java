@@ -19,10 +19,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-/**
- * Janela flutuante com controlos de captura.
- * ALTERAÇÃO: Agora pode ser arrastada pelo utilizador.
- */
+
 public class PainelControleFlutuante extends JWindow {
 
     private final ControladorPrincipal controlador;

@@ -8,15 +8,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Represents a single inspection, which contains a name, a description, and can
- * have multiple merged images associated with it.
- */
+
 public class Inspecao {
 
     private int id;
     private String nomePeca;
     private String descricao;
+    private String nomeOperador; // NOVO CAMPO
     private Date dataCriacao;
     private List<Mesclagem> mesclagens;
 
@@ -24,7 +22,7 @@ public class Inspecao {
         this.mesclagens = new ArrayList<>();
     }
 
-    // Getters and Setters
+    // Getters e Setters
     public int getId() {
         return id;
     }
@@ -47,6 +45,14 @@ public class Inspecao {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public String getNomeOperador() {
+        return nomeOperador;
+    }
+
+    public void setNomeOperador(String nomeOperador) {
+        this.nomeOperador = nomeOperador;
     }
 
     public Date getDataCriacao() {

@@ -6,10 +6,7 @@ package com.joaofontes.mosaic.model;
  */
 import java.util.Date;
 
-/**
- * Represents a single merged image. This was formerly SessaoCaptura. It is now
- * linked to a parent Inspecao via idInspecao.
- */
+
 public class Mesclagem {
 
     private int id;

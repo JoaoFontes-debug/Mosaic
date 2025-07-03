@@ -1,4 +1,4 @@
-package com.joaofontes.mosaic.util;
+package com.joaofontes.mosaic.service;
 
 import com.joaofontes.mosaic.controller.ControladorPrincipal;
 import com.joaofontes.mosaic.model.ConfiguracaoCaptura;

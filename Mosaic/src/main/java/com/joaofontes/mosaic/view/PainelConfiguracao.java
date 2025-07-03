@@ -4,7 +4,7 @@ import com.joaofontes.mosaic.controller.ControladorPrincipal;
 import com.joaofontes.mosaic.model.ConfiguracaoCaptura;
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
+
 
 public class PainelConfiguracao extends JPanel {
 
