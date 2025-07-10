@@ -3,9 +3,9 @@
 O **MOSAIC** é uma aplicação desktop desenvolvida em **Java (Swing)** para automatizar o processo de inspeção visual de peças e componentes. A ferramenta monitora uma área específica da tela, detecta alterações (mudança dos pixels na tela), captura uma sequência de imagens e as mescla automaticamente, criando um mosaico visual completo da superfície inspecionada.
 
 O sistema foi desenvolvido com foco em **rastreabilidade**, **segurança** e **usabilidade**, incluindo controle de acesso por usuários, autenticação segura, e histórico completo das inspeções realizadas.
+### Tela de Login
 
-![Screenshot da Tela Principal do MOSAIC](#)  
-> screenshot da interface principal da aplicação
+> ![Image](https://github.com/user-attachments/assets/5df46226-3256-4d98-af2b-61d5aa69f3a2)
 
 ---
 
