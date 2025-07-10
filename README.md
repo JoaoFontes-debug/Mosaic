@@ -3,7 +3,7 @@
 O **MOSAIC** é uma aplicação desktop desenvolvida em **Java (Swing)** para automatizar o processo de inspeção visual de peças e componentes. A ferramenta monitora uma área específica da tela, detecta alterações (mudança dos pixels na tela), captura uma sequência de imagens e as mescla automaticamente, criando um mosaico visual completo da superfície inspecionada.
 
 O sistema foi desenvolvido com foco em **rastreabilidade**, **segurança** e **usabilidade**, incluindo controle de acesso por usuários, autenticação segura, e histórico completo das inspeções realizadas.
-### Tela de Login
+### Tela de Principal
 
 > ![Image](https://github.com/user-attachments/assets/5df46226-3256-4d98-af2b-61d5aa69f3a2)
 
@@ -99,14 +99,11 @@ Após salvar, clique com o botão direito no projeto e selecione "Limpar e Const
 
 3. Configurar Envio de E-mail
    
-Crie o arquivo mail.properties na raiz do projeto:
+>Crie o arquivo mail.properties na raiz do projeto:
 
-NetBeans > "Ficheiros" > Novo > Outro > Ficheiro de Propriedades
+>NetBeans > "Ficheiros" > Novo > Outro > Ficheiro de Propriedades
 
-Conteúdo:
-
-properties
-
+```
 mail.smtp.host=smtp.gmail.com
 mail.smtp.port=587
 mail.smtp.auth=true
@@ -114,48 +111,43 @@ mail.smtp.starttls.enable=true
 
 mail.sender.username=seu-email-aqui@gmail.com
 mail.sender.password=sua-senha-de-app-de-16-letras-aqui
-💡 Importante: use uma senha de app do Google, não sua senha normal.
+```
+💡 **Importante:** use uma senha de app do Google, não sua senha normal.
 
 🧪 Como Usar
 1. Primeira Execução
-Ao abrir o sistema pela primeira vez:
 
-A base de dados estará vazia.
+- Ao abrir o sistema pela primeira vez:
 
-Na tela de login, clique em "Criar Conta".
+- A base de dados estará vazia.
 
-Preencha seus dados.
+- Na tela de login, clique em "Criar Conta".
 
-O primeiro usuário será automaticamente definido como Administrador.
+- Preencha seus dados.
+
+- O primeiro usuário será automaticamente definido como Administrador.
 
 2. Inspeção Visual
-Faça login com seu e-mail e senha.
 
-Vá até a aba "Metadados da Inspeção".
+- Faça login com seu e-mail e senha.
 
-Informe o nome da peça e uma descrição.
+- Vá até a aba "Metadados da Inspeção".
 
-Clique em "Iniciar Nova Inspeção".
+- Informe o nome da peça e uma descrição.
 
-O sistema irá monitorar a tela e capturar automaticamente as imagens, gerando um mosaico.
+- Clique em "Iniciar Nova Inspeção".
 
-📌 Observações
+- O sistema irá monitorar a tela e capturar automaticamente as imagens, gerando um mosaico.
+
+📌 **Observações**
 A aplicação é modular e pode ser estendida para integração com sistemas MES, ERP ou APIs externas.
-
-Recomenda-se o uso em ambientes com boa iluminação e fundo contrastante para melhores resultados de captura.
-
-📷 Exemplo de Interface
-(Adicione aqui uma imagem ou gif demonstrando o sistema em uso)
 
 📄 Licença
 Este projeto está licenciado sob a MIT License. Veja o arquivo LICENSE para mais informações.
 
-🤝 Contribuições
-Sinta-se livre para abrir issues, sugerir melhorias ou enviar pull requests.
-
 👨‍💻 Autor
-João Fontes
-github.com/JoaoFontes-debug
+**João Fontes**
+> github.com/JoaoFontes-debug
 
 ### 2. Clonar o Repositório
 
